@@ -1,0 +1,45 @@
+{
+  "name": "spring-launcher-backend",
+  "version": "1.0.0",
+  "description": "SpringRTS Launcher App",
+  "author": "Gajo Petrovic <gajopetrovic@gmail.com>",
+  "license": "ISC",
+  "repository": "https://github.com/gajop/spring-launcher.git",
+  "homepage": "https://github.com/gajop/spring-launcher",
+  "bugs": "https://github.com/gajop/spring-launcher/issues",
+  "keywords": [
+    "probot",
+    "github",
+    "probot-app"
+  ],
+  "scripts": {
+    "dev": "nodemon",
+    "start": "probot run ./src/app.js",
+    "lint": "standard --fix"
+  },
+  "dependencies": {
+    "@octokit/rest": "^15.11.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.13",
+    "probot": "^7.0.0",
+    "request": "^2.88.0",
+    "requests": "^0.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4",
+    "smee-client": "^1.0.2",
+    "standard": "^10.0.3"
+  },
+  "engines": {
+    "node": ">= 8.3.0"
+  },
+  "nodemonConfig": {
+    "exec": "npm start",
+    "watch": [
+      ".env",
+      "."
+    ]
+  }
+}
