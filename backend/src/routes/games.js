@@ -2,7 +2,7 @@ const express = require('express');
 const Octokit = require('@octokit/rest');
 
 const checkAuth = require('../middleware/check-auth');
-const Game = require('../models/game');
+//const Game = require('../models/repository');
 const User = require('../models/user');
 
 const router = express.Router();

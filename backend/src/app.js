@@ -35,31 +35,6 @@ module.exports = app => {
   router.use("/games", require('./routes/games'));
   router.use("/user", require('./routes/user'));
 
-  app.log('App loaded!');
-  // app.auth().then(github => {
-  //   // console.log('GITHUB', github);
-  //   github.apps.getInstallations().then(res => {
-  //     console.log('RES', res);
-  //   });
-  //   // github.apps.getInstallationRepositories().then(res => {
-  //   //   console.log(res);
-  //   // });
-  // });
-
-  app.on('push', async context => {
-    app.log("PUSHED");
-    app.log(context);
-  });
-
-  app.on(`*`, async context => {
-    app.log("MY LOG", {event: context.event, action: context.payload.action});
-  });
-
-  app.on('installation.deleted', async context => {
-    app.log("DELETED", context);
-  });
-
-  app.on('installations', async context => {
-    app.log('Installations', context);
-  });
+  const github_app_repository = require('./routes/github_app');
+  github_app_repository(app);
 }
