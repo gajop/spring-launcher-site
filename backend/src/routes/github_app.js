@@ -1,5 +1,4 @@
 const Repository = require("../models/repository");
-const builder = require("../builder/builder");
 
 module.exports = app => {
   function addUniqueRepositories(installation, repos) {
@@ -134,8 +133,14 @@ module.exports = app => {
           email : head_commit.committer.email,
           username : head_commit.committer.username,
         }
+      },
+      build_info: {
+        status: "queued",
+        created_time : Date.now()
       }
-    }
+    };
+
+    console.log(build);
 
     const query = { github_id: repo_id };
     Repository.findOneAndUpdate(query, {
@@ -145,29 +150,9 @@ module.exports = app => {
         app.log(error);
       } else {
         app.log(`Added build commit: ${head_commit.tree_id}`);
-        QueueBuild(repo_id, build);
+        app.log(build.build_info.status)
+        // QueueBuild(repo_id, build);
       }
     });
   });
-
-  // TODO: make this a queue so we don't run multiple builds in parallel (for now)
-  function QueueBuild(repo_id, build) {
-    const query = { github_id: repo_id };
-    Repository.findOne(query, (err, repo) => {
-      if (err) {
-        app.log(err);
-        return;
-      }
-
-      app.log(`Cloning repositories`);
-      const git_url = `https://github.com/${repo.full_name}.git`;
-      const repo_dir = `repo/${repo.full_name}`;
-      builder.clonePartially(git_url, repo_dir);
-      const launcher_dir = 'repo/spring-launcher';
-      builder.clone('https://github.com/gajop/spring-launcher.git', launcher_dir);
-      app.log(`Starting the build`);
-      const build_dir = `build/${repo.full_name}`;
-      builder.build(repo_dir, launcher_dir, build_dir);
-    });
-  }
 }

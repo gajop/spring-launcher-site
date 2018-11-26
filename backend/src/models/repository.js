@@ -33,10 +33,12 @@ module.exports = mongoose.model('Repository', mongoose.Schema({
     //   url: { type: String, required: false },
     // },
     build_info: {
-      start: { type: Date, required: false },
-      end: { type: Date, required: false },
-      result: { type: String, required: false },
-    },
+      created_time: { type: Date, required: false },
+      started_time: { type: Date, required: false },
+      ended_time: { type: Date, required: false },
+      status: { type: String, required: true },
+      err_msg: { type: String, required: false }
+    }
   }]
 }));
 

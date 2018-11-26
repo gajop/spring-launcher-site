@@ -1,0 +1,21 @@
+TODO: (Github CI + server stuff)
+7. Cleanup builds that started a long time ago but never finished.
+
+5. Upload build + log -> Log
+6. Finalize Queue => Result (Only THEN update the link to latest build)
+
+
+
+(History)
+1. Store old build results
+2. Store old build versions? (Maybe not?)
+
+TODO: (user authentication and site management)
+1. authenticate
+2. authorize
+3. button to "install to repository"
+4. ??
+
+TODO: (frontend)
+1. ??
+

@@ -37,4 +37,26 @@ module.exports = app => {
 
   const github_app_repository = require('./routes/github_app');
   github_app_repository(app);
+
+  /* Spawning buildbots seems t
+
+  const { spawn } = require('child_process');
+  const child = spawn('node', ['./src/builder/builder.js'], {
+    detached: true
+  });
+  child.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  child.stderr.on('data', (data) => {
+    console.log(`stderr: ${data}`);
+  });
+
+  child.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+  console.log("spawned");
+  // child.unref();
+
+  */
 }
