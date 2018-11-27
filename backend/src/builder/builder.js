@@ -20,6 +20,10 @@ function buildRepository(repo_dir, launcher_dir, build_dir) {
   return execSync(`sh build_repo.sh ${repo_dir} ${launcher_dir} ${build_dir}`);
 }
 
+function uploadBuild(build_dir, repo_full_name) {
+  return execSync(`sh upload_repo.sh ${build_dir} ${repo_full_name}`);
+}
+
 function logCall(stdout, stderr) {
   if (stdout) {
     console.log(stdout.toString());
@@ -76,6 +80,17 @@ function processBuildRequest(build, repo_full_name) {
     // console.error(err.toString());
   }
 
+  console.log(`Uploading the build`);
+  try {
+    logCall(uploadBuild(build_dir, repo_full_name));
+  } catch (err) {
+    reportBuildFailure(build,
+      repo_full_name,
+      "Failed uploading the launcher executables.")
+    return false;
+    // console.error(err.toString());
+  }
+
   return true;
 };
 
@@ -128,7 +143,7 @@ async function runQueries() {
   console.log(repo.builds[0]);
 
 
-  //processBuildRequest(repo.builds[0], repo.full_name);
+  processBuildRequest(repo.builds[0], repo.full_name);
 
   return true;
 }
@@ -149,8 +164,8 @@ async function runBuilder() {
 
   while (true) {
     if (!await runQueries()) {
+      await wait(5000);
     }
-    await wait(5000);
   }
 }
 
