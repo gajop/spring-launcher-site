@@ -1,9 +1,11 @@
 const { execSync } = require('child_process');
-const { existsSync } = require('fs');
+const { existsSync, readFileSync, writeFileSync } = require('fs');
+const assert = require('assert');
 
 const mongoose = require("mongoose");
 const Repository = require("../models/repository");
 
+const INTERNAL_VER = "1";
 
 async function runBuilder() {
   try {
@@ -105,6 +107,21 @@ function processBuildRequest(build, repo_full_name) {
     return false;
   }
 
+  console.log('Creating package.json');
+  try {
+    const version = `${INTERNAL_VER}.`
+                    + execSync('git rev-list --count HEAD', { cwd: launcher_dir }).toString().trim()
+                    + '.0';
+    console.log('version: ', version);
+    logCall(create_package_json(launcher_dir, repo_dir, repo_full_name, version));
+  } catch (err) {
+    console.error(err);
+    reportBuildFailure(build, repo_full_name,
+      "Failed to create package.json")
+    return false;
+  }
+
+
   console.log(`Starting the build`);
   const build_dir = `build/${repo_full_name}`;
   try {
@@ -141,6 +158,24 @@ function clone(git_url, dir) {
   return (existsSync(dir) ?
           execSync('git pull', { cwd: dir }) :
           execSync(`sh full_clone_repo.sh ${dir} ${git_url}`));
+}
+
+function create_package_json(launcher_dir, repo_dir, repo_full_name, version) {
+  const configStr = readFileSync(`${repo_dir}/dist_cfg/config.json`);
+  const config = JSON.parse(configStr);
+
+  assert(config.title != null);
+
+  const repo_dot_name = repo_full_name.replace(/\//g, '.');
+
+  const packageTemplate = readFileSync(`${launcher_dir}/package-template.json`).toString();
+  const packageJson = packageTemplate
+                        .replace("$(package_title)", config.title)
+                        .replace("$(version)", version)
+                        .replace("$(repo_full_name)", repo_full_name)
+                        .replace("$(repo_dot_name)", repo_dot_name);
+
+  writeFileSync(`${repo_dir}/package.json`, packageJson, 'utf8');
 }
 
 function buildRepository(repo_dir, launcher_dir, build_dir) {
