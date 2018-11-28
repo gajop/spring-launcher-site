@@ -110,7 +110,7 @@ function processBuildRequest(build, repo_full_name) {
   console.log('Creating package.json');
   try {
     const version = `${INTERNAL_VER}.`
-                    + execSync('git rev-list --count HEAD', { cwd: launcher_dir }).toString().trim()
+                    + execSync('git rev-list --count HEAD', { cwd: repo_dir }).toString().trim()
                     + '.0';
     console.log('version: ', version);
     logCall(create_package_json(launcher_dir, repo_dir, repo_full_name, version));
