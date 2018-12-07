@@ -17,15 +17,17 @@ async function runBuilder() {
   }
   console.log("Starting the builder...")
 
+  console.log("Checking for build requests...");
   while (true) {
     if (!await runQueries()) {
       await wait(5000);
+    } else {
+      console.log("Checking for build requests...");
     }
   }
 }
 
 async function runQueries() {
-  console.log("Checking for build requests...");
   var repo;
   try {
     // First we lock all queued builds (change their status)
