@@ -170,14 +170,13 @@ function create_package_json(launcher_dir, repo_dir, repo_full_name, version) {
 
   const repo_dot_name = repo_full_name.replace(/\//g, '.');
 
-  const packageTemplate = readFileSync(`${launcher_dir}/package-template.json`).toString();
-  const packageJson = packageTemplate
-                        .replace("$(package_title)", config.title)
-                        .replace("$(version)", version)
-                        .replace("$(repo_full_name)", repo_full_name)
-                        .replace("$(repo_dot_name)", repo_dot_name);
+  const packageTemplate = JSON.parse(readFileSync(`${launcher_dir}/package.json`).toString());
+  packageTemplate.name = config.title;
+  packageTemplate.version = version;
+  packageTemplate.build.appId = `${com.springrts.launcher.$(repo_dot_name)}`;
+  packageTemplate.build.publish.url = `https://spring-launcher.ams3.digitaloceanspaces.com/${repo_full_name}`;
 
-  writeFileSync(`${repo_dir}/package.json`, packageJson, 'utf8');
+  writeFileSync(`${repo_dir}/package.json`, JSON.stringify(packageTemplate), 'utf8');
 }
 
 function buildRepository(repo_dir, launcher_dir, build_dir) {

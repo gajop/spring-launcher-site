@@ -1,12 +1,23 @@
-TODO: (Github CI + server stuff)
-7. Cleanup builds that started a long time ago but never finished.
+TODO: (backend basics)
+- Add to SkeletonGame, LD42
+- Install should trigger a build
 
-5. Upload build + log -> Log
-6. Finalize Queue => Result (Only THEN update the link to latest build)
+spring-launcher should properly isolate
+spring-launcher should be runnable from an arbitrary place (it shouldn't use current directory, but relative to the app)
+
+TODO: (cleanup)
+- Cleanup builds that started a long time ago but never finished.
+- Upload log -> Log
+- Finalize Queue => Result (Only THEN update the link to latest build)
+
+- Add instructions:
+  # server
+  sudo apt-install mongodb
+  # builder and s3 uploader
+  sudo apt-install wine s3cmd mono-complete
 
 
-
-(History)
+TODO: (backend-extra)
 1. Store old build results
 2. Store old build versions? (Maybe not?)
 
@@ -18,4 +29,5 @@ TODO: (user authentication and site management)
 
 TODO: (frontend)
 1. ??
+
 
