@@ -173,7 +173,7 @@ function create_package_json(launcher_dir, repo_dir, repo_full_name, version) {
   const packageTemplate = JSON.parse(readFileSync(`${launcher_dir}/package.json`).toString());
   packageTemplate.name = config.title;
   packageTemplate.version = version;
-  packageTemplate.build.appId = `${com.springrts.launcher.$(repo_dot_name)}`;
+  packageTemplate.build.appId = `com.springrts.launcher.${repo_dot_name}`;
   packageTemplate.build.publish.url = `https://spring-launcher.ams3.digitaloceanspaces.com/${repo_full_name}`;
 
   writeFileSync(`${repo_dir}/package.json`, JSON.stringify(packageTemplate), 'utf8');
