@@ -1,3 +1,9 @@
+## Building for production
+
+`ng build --prod --env=prod`
+
+-- Generated info below --
+
 # SpringLauncherSite
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.5.

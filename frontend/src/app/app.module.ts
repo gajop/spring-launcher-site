@@ -13,6 +13,7 @@ import { AuthComponent } from './auth/auth.component';
 import { GameListComponent } from './game/game-list/game-list.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { GameAddComponent } from './game/game-add/game-add.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import { GameAddComponent } from './game/game-add/game-add.component';
     HeaderComponent,
     AuthComponent,
     GameListComponent,
-    GameAddComponent
+    GameAddComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -35,7 +36,9 @@ import { GameAddComponent } from './game/game-add/game-add.component';
     MatButtonModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
-    MatToolbarModule
+    MatToolbarModule,
+
+    FontAwesomeModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]

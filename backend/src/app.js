@@ -32,7 +32,7 @@ module.exports = app => {
   });
 
   router.use("/github", require('./routes/github'));
-  router.use("/games", require('./routes/games'));
+  router.use("/repos", require('./routes/repos'));
   router.use("/user", require('./routes/user'));
 
   const github_app_repository = require('./routes/github_app');

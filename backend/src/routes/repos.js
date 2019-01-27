@@ -4,12 +4,13 @@ const Octokit = require('@octokit/rest');
 const checkAuth = require('../middleware/check-auth');
 //const Game = require('../models/repository');
 const User = require('../models/user');
+const Repository = require('../models/repository');
 
 const router = express.Router();
 
 router.get("", (req, res, next) => {
-  Game.find().then(games => {
-    res.status(200).json(games);
+  Repository.find().then(repositories => {
+    res.status(200).json(repositories);
   });
 })
 

@@ -38,7 +38,13 @@ module.exports = mongoose.model('Repository', mongoose.Schema({
       ended_time: { type: Date, required: false },
       status: { type: String, required: true },
       err_msg: { type: String, required: false }
-    }
+    },
+
+    result_info: {
+      dl_windows_url: { type: String, required: false },
+      dl_linux_url: { type: String, required: false },
+      dl_build_log_url: { type: String, required: false },
+    },
   }]
 }));
 

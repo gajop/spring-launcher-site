@@ -1,3 +1,12 @@
-<p>
-  game-list works!
-</p>
+<ul class="games">
+  <li *ngFor="let game of games" type=[Game]>
+    <span class="repo_title">{{game.name}}</span>
+    <!-- <fa-icon icon="coffee"></fa-icon> -->
+    <div class="dl_links">
+      <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faWindows">Windows</fa-icon></a>
+      <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faLinux">Linux</fa-icon></a>
+      <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faGithub">Github</fa-icon></a>
+      <a class='link' href='http://logs.springrts.com/tags/{{game.name}}/'>User logs</a>
+    </div>
+  </li>
+</ul>

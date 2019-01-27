@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'http://localhost:3000/api/',
+  dlUrl: 'https://spring-launcher.ams3.digitaloceanspaces.com/'
 };
 
 /*
