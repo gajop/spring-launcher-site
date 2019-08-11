@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 module.exports = mongoose.model('Repository', mongoose.Schema({
   github_id: { type: Number, required: true},
@@ -11,20 +11,20 @@ module.exports = mongoose.model('Repository', mongoose.Schema({
 
   installation: {
     id: { type: Number, required: true},
-    url: { type: String, required: true },
+    url: { type: String, required: true }
   },
 
   builds: [{
     // commit info
-    commit : {
+    commit: {
       message: { type: String, required: false },
       hash: { type: String, required: false },
       url: { type: String, required: false },
       timestamp: { type: Date, required: false },
-      committer : {
+      committer: {
         name: { type: String, required: false },
         email: { type: String, required: false },
-        username: { type: String, required: false },
+        username: { type: String, required: false }
       }
     },
     // TODO: support different branches
@@ -46,5 +46,4 @@ module.exports = mongoose.model('Repository', mongoose.Schema({
       dl_build_log_url: { type: String, required: false },
     },
   }]
-}));
-
+}))

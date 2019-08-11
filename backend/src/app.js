@@ -4,9 +4,9 @@
  */
 
 module.exports = app => {
-  const bodyParser = require('body-parser');
-  const mongoose = require("mongoose");
-  const router = app.route('/api');
+  const bodyParser = require('body-parser')
+  const mongoose = require('mongoose')
+  const router = app.route('/api')
 
   console.log(app.app())
 
@@ -15,28 +15,28 @@ module.exports = app => {
       console.log('Connected to database')
     })
     .catch(() => {
-      console.error('Connection failed');
-    });
+      console.error('Connection failed')
+    })
 
-  router.use(bodyParser.json());
+  router.use(bodyParser.json())
 
   router.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    );
+    )
     res.setHeader('Access-Control-Allow-Methods',
       'GET, POST, PATCH, PUT, DELETE, OPTIONS'
-    );
-    next();
-  });
+    )
+    next()
+  })
 
   router.use("/github", require('./routes/github'));
   router.use("/repos", require('./routes/repos'));
   router.use("/user", require('./routes/user'));
 
-  const github_app_repository = require('./routes/github_app');
-  github_app_repository(app);
+  const github_app_repository = require('./routes/github_app')
+  github_app_repository(app)
 
   /* Spawning buildbots seems t
 
