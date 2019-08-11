@@ -33,22 +33,22 @@ async function runQueries () {
     // First we lock all queued builds (change their status)
     await Repository.updateOne(
       { 'builds.build_info.status': 'queued' },
-      { '$set': { 'builds.$[].build_info.status': 'queued_lock'} }).exec()
+      { $set: { 'builds.$[].build_info.status': 'queued_lock' } }).exec()
 
     // Here we query and update one (locked) build query
     // We change its status to "started" and initialize the build time
     // We also return the changed query with the repo full name
     const query = { 'builds.build_info.status': 'queued_lock' }
-    const update = { '$set': {
+    const update = { $set: {
       'builds.$.build_info.status': 'started',
       'builds.$.build_info.started_time': Date.now()
-    }}
+    } }
     repo = await Repository.findOneAndUpdate(
       query,
       update,
       {
         sort: { 'builds.build_info.created_time': -1 },
-        projection: { 'full_name': 1, 'builds.$': 1}
+        projection: { full_name: 1, 'builds.$': 1 }
       }
     ).exec()
     if (repo == null) {
@@ -61,7 +61,7 @@ async function runQueries () {
     await Repository.updateOne(
       { _id: repo._id,
         'builds.build_info.status': 'queued_lock' },
-      { '$set': { 'builds.$[].build_info.status': 'skipped'} }).exec()
+      { $set: { 'builds.$[].build_info.status': 'skipped' } }).exec()
   } catch (err) {
     // Seems like hell at this point? TODO: Handle exceptions better.
     console.error(err)
@@ -82,27 +82,27 @@ function wait (milleseconds) {
   return new Promise(resolve => setTimeout(resolve, milleseconds))
 }
 
-function processBuildRequest (build, repo_full_name) {
+function processBuildRequest (build, repoFullName) {
   console.log(`Cloning repositories`)
-  const git_url = `https://github.com/${repo_full_name}.git`
-  const repo_dir = `repo/${repo_full_name}`
+  const gitUrl = `https://github.com/${repoFullName}.git`
+  const repoDir = `repo/${repoFullName}`
 
   try {
-    logCall(clonePartially(git_url, repo_dir))
+    logCall(clonePartially(gitUrl, repoDir))
   } catch (err) {
     reportBuildFailure(build,
-      repo_full_name,
+      repoFullName,
       'Failed cloning Git repository.')
     return false
   }
 
-  const launcher_dir = 'repo/spring-launcher'
+  const launcherDir = 'repo/spring-launcher'
   try {
     logCall(clone('https://github.com/gajop/spring-launcher.git',
-          launcher_dir))
+      launcherDir))
   } catch (err) {
     reportBuildFailure(build,
-      repo_full_name,
+      repoFullName,
       'Internal Error. Failed cloning Launcher Git repository.')
     return false
   }
@@ -110,24 +110,24 @@ function processBuildRequest (build, repo_full_name) {
   console.log('Creating package.json')
   try {
     const version = `${INTERNAL_VER}.` +
-                    execSync('git rev-list --count HEAD', { cwd: repo_dir }).toString().trim() +
+                    execSync('git rev-list --count HEAD', { cwd: repoDir }).toString().trim() +
                     '.0'
     console.log('version: ', version)
-    logCall(create_package_json(launcher_dir, repo_dir, repo_full_name, version))
+    logCall(createPackageJson(launcherDir, repoDir, repoFullName, version))
   } catch (err) {
     console.error(err)
-    reportBuildFailure(build, repo_full_name,
+    reportBuildFailure(build, repoFullName,
       'Failed to create package.json')
     return false
   }
 
   console.log(`Starting the build`)
-  const build_dir = `build/${repo_full_name}`
+  const buildDir = `build/${repoFullName}`
   try {
-    logCall(buildRepository(repo_dir, launcher_dir, build_dir))
+    logCall(buildRepository(repoDir, launcherDir, buildDir))
   } catch (err) {
     reportBuildFailure(build,
-      repo_full_name,
+      repoFullName,
       'Failed building the launcher executables.')
     return false
     // console.error(err.toString());
@@ -135,10 +135,10 @@ function processBuildRequest (build, repo_full_name) {
 
   console.log(`Uploading the build`)
   try {
-    logCall(uploadBuild(build_dir, repo_full_name))
+    logCall(uploadBuild(buildDir, repoFullName))
   } catch (err) {
     reportBuildFailure(build,
-      repo_full_name,
+      repoFullName,
       'Failed uploading the launcher executables.')
     return false
     // console.error(err.toString());
@@ -147,42 +147,43 @@ function processBuildRequest (build, repo_full_name) {
   return true
 };
 
-function clonePartially (git_url, dir) {
+function clonePartially (gitUrl, dir) {
   return (existsSync(dir)
-          ? execSync('git pull', { cwd: dir })
-          : execSync(`sh partial_clone_repo.sh ${dir} ${git_url}`))
+    ? execSync('git pull', { cwd: dir })
+    : execSync(`sh partial_clone_repo.sh ${dir} ${gitUrl}`))
 }
 
-function clone (git_url, dir) {
+function clone (gitUrl, dir) {
   return (existsSync(dir)
-          ? execSync('git pull', { cwd: dir })
-          : execSync(`sh full_clone_repo.sh ${dir} ${git_url}`))
+    ? execSync('git pull', { cwd: dir })
+    : execSync(`sh full_clone_repo.sh ${dir} ${gitUrl}`))
 }
 
-function create_package_json (launcher_dir, repo_dir, repo_full_name, version) {
-  const configStr = readFileSync(`${repo_dir}/dist_cfg/config.json`)
+function createPackageJson (launcherDir, repoDir, repoFullName, version) {
+  const configStr = readFileSync(`${repoDir}/dist_cfg/config.json`)
   const config = JSON.parse(configStr)
 
   assert(config.title != null)
 
-  const repo_dot_name = repo_full_name.replace(/\//g, '.')
+  const repoDotName = repoFullName.replace(/\//g, '.')
 
-  const packageTemplate = JSON.parse(readFileSync(`${launcher_dir}/package.json`).toString())
+  const packageTemplate = JSON.parse(readFileSync(`${launcherDir}/package.json`).toString())
   packageTemplate.name = config.title.replace(/ /g, '-')
-  packageTemplate.build.artifactName = config.title + '.${ext}' // "" is used on purpose, we want the spring to contain ${ext} as text
+  // eslint-disable-next-line no-template-curly-in-string
+  packageTemplate.build.artifactName = config.title + '.${ext}' // '' is used on purpose, we want the spring to contain ${ext} as text
   packageTemplate.version = version
-  packageTemplate.build.appId = `com.springrts.launcher.${repo_dot_name}`
-  packageTemplate.build.publish.url = `https://spring-launcher.ams3.digitaloceanspaces.com/${repo_full_name}`
+  packageTemplate.build.appId = `com.springrts.launcher.${repoDotName}`
+  packageTemplate.build.publish.url = `https://spring-launcher.ams3.digitaloceanspaces.com/${repoFullName}`
 
-  writeFileSync(`${repo_dir}/package.json`, JSON.stringify(packageTemplate), 'utf8')
+  writeFileSync(`${repoDir}/package.json`, JSON.stringify(packageTemplate), 'utf8')
 }
 
-function buildRepository (repo_dir, launcher_dir, build_dir) {
-  return execSync(`sh build_repo.sh ${repo_dir} ${launcher_dir} ${build_dir}`)
+function buildRepository (repoDir, launcherDir, buildDir) {
+  return execSync(`sh build_repo.sh ${repoDir} ${launcherDir} ${buildDir}`)
 }
 
-function uploadBuild (build_dir, repo_full_name) {
-  return execSync(`sh upload_repo.sh ${build_dir} ${repo_full_name}`)
+function uploadBuild (buildDir, repoFullName) {
+  return execSync(`sh upload_repo.sh ${buildDir} ${repoFullName}`)
 }
 
 function logCall (stdout, stderr) {
@@ -194,14 +195,14 @@ function logCall (stdout, stderr) {
   }
 }
 
-async function reportBuildFailure (build, repo_full_name, err_msg) {
+async function reportBuildFailure (build, repoFullName, errMsg) {
   const query = { 'builds._id': build._id }
-  const update = { '$set': {
+  const update = { $set: {
     'builds.$.build_info.status': 'failed',
-    'builds.$.build_info.err_msg': err_msg,
+    'builds.$.build_info.err_msg': errMsg,
     'builds.$.build_info.end_time': Date.now()
-  }}
-  return await Repository.findOneAndUpdate(query, update).exec()
+  } }
+  return Repository.findOneAndUpdate(query, update).exec()
 }
 
 module.exports = {
