@@ -35,8 +35,8 @@ module.exports = app => {
   router.use("/repos", require('./routes/repos'));
   router.use("/user", require('./routes/user'));
 
-  const github_app_repository = require('./routes/github_app')
-  github_app_repository(app)
+  const githubAppRepository = require('./routes/github_app')
+  githubAppRepository(app)
 
   /* Spawning buildbots seems t
 
