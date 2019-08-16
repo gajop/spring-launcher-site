@@ -1,0 +1,72 @@
+{
+  "action": "created",
+  "installation": {
+    "id": 1307285,
+    "account": {
+      "login": "gajop",
+      "id": 64901,
+      "node_id": "MDQ6VXNlcjY0OTAx",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/64901?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/gajop",
+      "html_url": "https://github.com/gajop",
+      "followers_url": "https://api.github.com/users/gajop/followers",
+      "following_url": "https://api.github.com/users/gajop/following{/other_user}",
+      "gists_url": "https://api.github.com/users/gajop/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/gajop/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/gajop/subscriptions",
+      "organizations_url": "https://api.github.com/users/gajop/orgs",
+      "repos_url": "https://api.github.com/users/gajop/repos",
+      "events_url": "https://api.github.com/users/gajop/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/gajop/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "repository_selection": "selected",
+    "access_tokens_url": "https://api.github.com/app/installations/1307285/access_tokens",
+    "repositories_url": "https://api.github.com/installation/repositories",
+    "html_url": "https://github.com/settings/installations/1307285",
+    "app_id": 21337,
+    "target_id": 64901,
+    "target_type": "User",
+    "permissions": {
+      "contents": "read",
+      "metadata": "read"
+    },
+    "events": [
+      "push"
+    ],
+    "created_at": 1563694175,
+    "updated_at": 1563694175,
+    "single_file_name": null
+  },
+  "repositories": [
+    {
+      "id": 148321286,
+      "node_id": "MDEwOlJlcG9zaXRvcnkxNDgzMjEyODY=",
+      "name": "test-repo",
+      "full_name": "gajop/test-repo",
+      "private": false
+    }
+  ],
+  "sender": {
+    "login": "gajop",
+    "id": 64901,
+    "node_id": "MDQ6VXNlcjY0OTAx",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/64901?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/gajop",
+    "html_url": "https://github.com/gajop",
+    "followers_url": "https://api.github.com/users/gajop/followers",
+    "following_url": "https://api.github.com/users/gajop/following{/other_user}",
+    "gists_url": "https://api.github.com/users/gajop/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/gajop/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/gajop/subscriptions",
+    "organizations_url": "https://api.github.com/users/gajop/orgs",
+    "repos_url": "https://api.github.com/users/gajop/repos",
+    "events_url": "https://api.github.com/users/gajop/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/gajop/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}

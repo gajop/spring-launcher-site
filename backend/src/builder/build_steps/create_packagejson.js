@@ -2,7 +2,17 @@ const { execSync } = require('child_process')
 const assert = require('assert')
 const { readFileSync, writeFileSync } = require('fs')
 
-function createPackageJson (launcherDir, repoDir, repoFullName, version) {
+const INTERNAL_VER = '1'
+
+function createPackagejsonFromGit (launcherDir, repoDir, repoFullName) {
+  console.log('Creating package.json')
+  const version = `${INTERNAL_VER}.` +
+  execSync('git rev-list --count HEAD', { cwd: repoDir }).toString().trim() + '.0'
+  console.log('version: ', version)
+  createPackagejson(launcherDir, repoDir, repoFullName, version)
+}
+
+function createPackagejson (launcherDir, repoDir, repoFullName, version) {
   const configStr = readFileSync(`${repoDir}/dist_cfg/config.json`)
   const config = JSON.parse(configStr)
 
@@ -21,11 +31,7 @@ function createPackageJson (launcherDir, repoDir, repoFullName, version) {
   writeFileSync(`${repoDir}/package.json`, JSON.stringify(packageTemplate), 'utf8')
 }
 
-function buildRepository (repoDir, launcherDir, buildDir) {
-  return execSync(`sh build_repo.sh ${repoDir} ${launcherDir} ${buildDir}`)
-}
-
 module.exports = {
-  createPackageJson: createPackageJson,
-  buildRepository: buildRepository
+  createPackagejsonFromGit: createPackagejsonFromGit,
+  createPackagejson: createPackagejson
 }

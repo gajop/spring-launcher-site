@@ -1,12 +1,10 @@
 'use strict'
 
-const { PartialClone, NoSuchPartialPathError, FailedToCloneError } = require('./partial_clone')
+const { partialClone, NoSuchPartialPathError, FailedToCloneError } = require('./partial_clone')
 
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const { execSync } = require('child_process')
-
-const rimraf = require('rimraf')
 
 var TEST_DIR
 
@@ -15,16 +13,15 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  rimraf.sync(TEST_DIR)
+  fs.removeSync(TEST_DIR)
 })
 
 test('ok-clone-1', () => {
   const clonePath = path.join(TEST_DIR, 'clonedir')
   const partialPath = 'backend/src/builder'
-  const cmd = new PartialClone('https://github.com/gajop/spring-launcher-site.git',
+  partialClone('https://github.com/gajop/spring-launcher-site.git',
     clonePath,
     partialPath)
-  cmd.execute()
   expect(fs.existsSync(clonePath)).toBe(true)
   expect(fs.existsSync(path.join(clonePath, partialPath))).toBe(true)
 })
@@ -36,19 +33,17 @@ test('ok-clone-2', () => {
   // first repo
   const clonePath1 = path.join(TEST_DIR, 'clonedir1')
   const partialPath = 'src/exts'
-  const cmd1 = new PartialClone('https://github.com/gajop/spring-launcher.git',
+  partialClone('https://github.com/gajop/spring-launcher.git',
     clonePath1,
     partialPath)
-  cmd1.execute()
   expect(fs.existsSync(clonePath1)).toBe(true)
   expect(fs.existsSync(path.join(clonePath1, partialPath))).toBe(true)
 
   // second repo (based on the first one)
   const clonePath2 = path.join(TEST_DIR, 'clonedir2')
-  const cmd2 = new PartialClone(path.resolve(clonePath1),
+  partialClone(path.resolve(clonePath1),
     clonePath2,
     partialPath)
-  cmd2.execute()
   expect(fs.existsSync(clonePath2)).toBe(true)
   expect(fs.existsSync(path.join(clonePath2, partialPath))).toBe(true)
 
@@ -59,17 +54,18 @@ test('ok-clone-2', () => {
   execSync('git commit -m "add new file"', { cwd: clonePath1 })
 
   // clone it to repo 2
-  cmd2.execute()
+  partialClone(path.resolve(clonePath1),
+    clonePath2,
+    partialPath)
   expect(fs.existsSync(path.join(clonePath2, partialPath, 'test.txt'))).toBe(true)
 })
 
 test('ok-update', () => {
   const clonePath = path.join(TEST_DIR, 'clonedir')
   const partialPath = 'backend/src/builder'
-  const cmd = new PartialClone('https://github.com/gajop/spring-launcher-site.git',
+  partialClone('https://github.com/gajop/spring-launcher-site.git',
     clonePath,
     partialPath)
-  cmd.execute()
   expect(fs.existsSync(clonePath)).toBe(true)
   expect(fs.existsSync(path.join(clonePath, partialPath))).toBe(true)
 })
@@ -77,19 +73,17 @@ test('ok-update', () => {
 test('fail-no-partial-path', () => {
   const clonePath = path.join(TEST_DIR, 'clonedir')
   const partialPath = 'dist_cfg'
-  const cmd = new PartialClone('https://github.com/gajop/spring-launcher.git',
+  expect(() => partialClone('https://github.com/gajop/spring-launcher.git',
     clonePath,
-    partialPath)
-  expect(() => cmd.execute()).toThrow(NoSuchPartialPathError)
+    partialPath)).toThrow(NoSuchPartialPathError)
   expect(fs.existsSync(path.join(clonePath, partialPath))).toBe(false)
 })
 
 test('fail-invalid-git-url', () => {
   const clonePath = path.join(TEST_DIR, 'clonedir')
   const partialPath = 'src/exts'
-  const cmd = new PartialClone('https://github.com/gajop/spring-launcher.invalid',
+  expect(() => partialClone('https://github.com/gajop/spring-launcher.invalid',
     clonePath,
-    partialPath)
-  expect(() => cmd.execute()).toThrow(FailedToCloneError)
+    partialPath)).toThrow(FailedToCloneError)
   expect(fs.existsSync(path.join(clonePath, partialPath))).toBe(false)
 })

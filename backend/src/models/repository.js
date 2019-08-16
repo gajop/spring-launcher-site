@@ -43,7 +43,7 @@ module.exports = mongoose.model('Repository', mongoose.Schema({
     result_info: {
       dl_windows_url: { type: String, required: false },
       dl_linux_url: { type: String, required: false },
-      dl_build_log_url: { type: String, required: false },
-    },
+      dl_build_log_url: { type: String, required: false }
+    }
   }]
 }))

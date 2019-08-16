@@ -1,13 +1,8 @@
-const { execSync } = require('child_process')
-const { existsSync } = require('fs')
-
 const mongoose = require('mongoose')
 
 const Repository = require('../models/repository')
 
-const packager = require('./packager')
-
-const INTERNAL_VER = '1'
+const { processBuild } = require('./process_build')
 
 async function runBuilder () {
   try {
@@ -75,7 +70,12 @@ async function runQueries () {
   console.log(`One queued repo: ${repo.full_name}`)
   console.log(repo.builds[0])
 
-  processBuildRequest(repo.builds[0], repo.full_name)
+  try {
+    const gitUrl = `https://github.com/${repo.full_name}.git`
+    processBuild(repo.full_name, gitUrl)
+  } catch (err) {
+    reportBuildFailure(repo.builds[0], err.message)
+  }
 
   return true
 }
@@ -84,56 +84,7 @@ function wait (milleseconds) {
   return new Promise(resolve => setTimeout(resolve, milleseconds))
 }
 
-function processBuildRequest (build, repoFullName) {
-  console.log(`Cloning repositories`)
-  const gitUrl = `https://github.com/${repoFullName}.git`
-  const repoDir = `repo/${repoFullName}`
-
-  try {
-    logCall(clonePartially(gitUrl, repoDir))
-
-    const launcherDir = 'repo/spring-launcher'
-    logCall(clone('https://github.com/gajop/spring-launcher.git', launcherDir))
-
-    console.log('Creating package.json')
-    const version = `${INTERNAL_VER}.` +
-    execSync('git rev-list --count HEAD', { cwd: repoDir }).toString().trim() + '.0'
-    console.log('version: ', version)
-    logCall(packager.createPackageJson(launcherDir, repoDir, repoFullName, version))
-
-    console.log(`Starting the build`)
-    const buildDir = `build/${repoFullName}`
-    logCall(packager.buildRepository(repoDir, launcherDir, buildDir))
-
-    console.log(`Uploading the build`)
-    logCall(uploadBuild(buildDir, repoFullName))
-  } catch (err) {
-    return false
-  }
-
-  return true
-};
-
-function clone (gitUrl, dir) {
-  return (existsSync(dir)
-    ? execSync('git pull', { cwd: dir })
-    : execSync(`sh full_clone_repo.sh ${dir} ${gitUrl}`))
-}
-
-function uploadBuild (buildDir, repoFullName) {
-  return execSync(`sh upload_repo.sh ${buildDir} ${repoFullName}`)
-}
-
-function logCall (stdout, stderr) {
-  if (stdout) {
-    console.log(stdout.toString())
-  }
-  if (stderr) {
-    console.error(stderr.toString())
-  }
-}
-
-async function reportBuildFailure (build, repoFullName, errMsg) {
+async function reportBuildFailure (build, errMsg) {
   const query = { 'builds._id': build._id }
   const update = { $set: {
     'builds.$.build_info.status': 'failed',

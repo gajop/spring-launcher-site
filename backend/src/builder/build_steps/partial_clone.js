@@ -1,76 +1,72 @@
 'use strict'
 
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const { execSync } = require('child_process')
-
-const BuildStep = require('./build_step')
 
 class NoSuchPartialPathError extends Error {
 }
 class FailedToCloneError extends Error {
 }
 
-class PartialClone extends BuildStep {
-  constructor (gitUrl, clonePath, partialPath) {
-    super('Partial clone')
-    this.gitUrl = gitUrl
-    this.clonePath = clonePath
-    this.partialPath = partialPath
+function partialClone (gitUrl, clonePath, partialPath) {
+  if (!partialPath.endsWith('*')) {
+    partialPath += '*'
   }
-
-  execute () {
-    console.log(`Partially cloning: ${this.gitUrl}:${this.partialPath} to ${this.clonePath}...`)
-
-    fs.existsSync(this.clonePath) ? this.pullExisting() : this.cloneNew()
+  if (!partialPath.endsWith('/*')) {
+    partialPath = partialPath.slice(0, partialPath.length - 1) + '/*'
   }
+  console.log(`Partially cloning: ${gitUrl}:${partialPath} to ${clonePath}...`)
 
-  pullExisting () {
-    execSync('git pull --rebase', {
-      cwd: this.clonePath
-    })
-  }
+  fs.existsSync(clonePath) ? pullExisting(clonePath) : cloneNew(gitUrl, clonePath, partialPath)
+}
 
-  cloneNew () {
-    fs.mkdirSync(this.clonePath)
-    execSync('git init', {
-      cwd: this.clonePath
-    })
-    execSync('git config core.sparseCheckout true', {
-      cwd: this.clonePath
-    })
+function pullExisting (clonePath) {
+  execSync('git pull --rebase', {
+    cwd: clonePath
+  })
+}
 
-    try {
-      execSync(`git remote add -f origin ${this.gitUrl}`, {
-        cwd: this.clonePath,
-        timeout: 10000
-      })
-    } catch (error) {
-      if (error.code === 'ETIMEDOUT') {
-        throw new FailedToCloneError()
-      }
-      throw error
+function cloneNew (gitUrl, clonePath, partialPath) {
+  fs.ensureDirSync(clonePath)
+  execSync('git init', {
+    cwd: clonePath
+  })
+  execSync('git config core.sparseCheckout true', {
+    cwd: clonePath
+  })
+
+  try {
+    execSync(`git remote add -f origin ${gitUrl}`, {
+      cwd: clonePath,
+      timeout: 10000
+    })
+  } catch (error) {
+    if (error.code === 'ETIMEDOUT') {
+      throw new FailedToCloneError()
     }
+    throw error
+  }
 
-    fs.writeFileSync(
-      path.join(this.clonePath, '.git/info/sparse-checkout'),
-      `${this.partialPath}/*`
-    )
+  fs.writeFileSync(
+    path.join(clonePath, '.git/info/sparse-checkout'),
+    partialPath
+  )
 
-    try {
-      execSync('git checkout master', {
-        cwd: this.clonePath
-      })
-    } catch (error) {
-      if (error.message === 'error: Sparse checkout leaves no entry on working directory') {
-        throw new NoSuchPartialPathError()
-      }
-      throw error
+  try {
+    execSync('git checkout master', {
+      cwd: clonePath
+    })
+  } catch (error) {
+    if (error.message.includes('error: Sparse checkout leaves no entry on working directory')) {
+      throw new NoSuchPartialPathError()
     }
+    throw error
   }
 }
 
 module.exports = {
-  PartialClone: PartialClone
-
+  partialClone: partialClone,
+  NoSuchPartialPathError: NoSuchPartialPathError,
+  FailedToCloneError: FailedToCloneError
 }
