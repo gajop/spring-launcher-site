@@ -85,7 +85,7 @@ function wait(milleseconds) {
 
 
 function processBuildRequest(build, repo_full_name) {
-  console.log(`Cloning repositories`);
+  console.log(`Cloning repositories...`);
   const git_url = `https://github.com/${repo_full_name}.git`;
   const repo_dir = `repo/${repo_full_name}`;
 
@@ -109,7 +109,7 @@ function processBuildRequest(build, repo_full_name) {
     return false;
   }
 
-  console.log('Creating package.json');
+  console.log('Creating package.json...');
   try {
     const version = `${INTERNAL_VER}.`
                     + execSync('git rev-list --count HEAD', { cwd: repo_dir }).toString().trim()
@@ -123,8 +123,16 @@ function processBuildRequest(build, repo_full_name) {
     return false;
   }
 
+  console.log('Updating repo information from config.json...');
+  try {
+    updateRepoTitle(build, repo_dir);
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 
-  console.log(`Starting the build`);
+
+  console.log(`Starting the build...`);
   const build_dir = `build/${repo_full_name}`;
   try {
     logCall(buildRepository(repo_dir, launcher_dir, build_dir));
@@ -136,7 +144,7 @@ function processBuildRequest(build, repo_full_name) {
     // console.error(err.toString());
   }
 
-  console.log(`Uploading the build`);
+  console.log(`Uploading the build...`);
   try {
     logCall(uploadBuild(build_dir, repo_full_name));
   } catch (err) {
@@ -146,6 +154,8 @@ function processBuildRequest(build, repo_full_name) {
     return false;
     // console.error(err.toString());
   }
+
+  reportBuildSuccess(build);
 
   return true;
 };
@@ -205,6 +215,28 @@ async function reportBuildFailure(build, repo_full_name, err_msg) {
     "builds.$.build_info.end_time" : Date.now()
   }};
   return await Repository.findOneAndUpdate(query, update).exec();
+}
+
+async function reportBuildSuccess(build) {
+  const query = { 'builds._id' : build._id };
+  const update = { "$set" : {
+    "builds.$.build_info.status" : "success",
+    "builds.$.build_info.end_time" : Date.now()
+  }};
+  return await Repository.findOneAndUpdate(query, update).exec();
+}
+
+async function updateRepoTitle(build, repo_dir) {
+  const configStr = readFileSync(`${repo_dir}/dist_cfg/config.json`);
+  const config = JSON.parse(configStr);
+  assert(config.title != null);
+
+  const query = { 'builds._id' : build._id };
+  const update = { "$set" : {
+    "title" : config.title
+  }};
+  console.log(`Config.title: ${config.title}`);
+  await Repository.findOneAndUpdate(query, update).exec();
 }
 
 
