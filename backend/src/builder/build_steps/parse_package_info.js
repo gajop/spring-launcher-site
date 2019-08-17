@@ -7,7 +7,7 @@ function parsePackageInfo (repoDir) {
   assert(config.title != null)
 
   var hasPortable = false
-  for (var setup in config.setups) {
+  for (const setup of config.setups) {
     if (setup.package && setup.package.portable === true) {
       hasPortable = true
       break

@@ -55,3 +55,29 @@ test('ok-build-repo-2', () => {
 
   expect(fs.existsSync(path.join(distDir, `${packageInfo.title}-portable.exe`))).toBe(true)
 })
+
+test('ok-build-repo-3', () => {
+  const repoDir = path.join(TEST_DIR, 'repo')
+  const launcherDir = path.join(TEST_DIR, 'launcher')
+  const buildDir = path.join(TEST_DIR, 'build')
+
+  partialClone('https://github.com/gajop/test-repo.git', repoDir, 'dist_cfg')
+  clone('https://github.com/gajop/spring-launcher.git', launcherDir)
+  createPackagejsonFromGit(launcherDir, repoDir, 'test-repo')
+  const packageInfo = parsePackageInfo(repoDir)
+  var buildTypes = ['windows', 'linux']
+  if (packageInfo.hasPortable) {
+    buildTypes.push('windows-portable')
+  }
+  buildRepository(repoDir, launcherDir, buildDir, buildTypes)
+
+  const distDir = path.join(buildDir, 'dist')
+  expect(fs.existsSync(path.join(distDir, 'latest-linux.yml'))).toBe(true)
+  expect(fs.existsSync(path.join(distDir, `${packageInfo.title}.AppImage`))).toBe(true)
+
+  expect(fs.existsSync(path.join(distDir, 'latest.yml'))).toBe(true)
+  expect(fs.existsSync(path.join(distDir, `${packageInfo.title}.exe`))).toBe(true)
+  expect(fs.existsSync(path.join(distDir, `${packageInfo.title}.exe.blockmap`))).toBe(true)
+
+  expect(fs.existsSync(path.join(distDir, `${packageInfo.title}-portable.exe`))).toBe(true)
+})
