@@ -27,7 +27,8 @@ function cloneNew (gitUrl, clonePath) {
   try {
     execSync(`git remote add -f origin ${gitUrl}`, {
       cwd: clonePath,
-      timeout: 10000
+      // TODO: These numbers are arbitrary and depend on the connection
+      timeout: 120000
     })
   } catch (error) {
     if (error.code === 'ETIMEDOUT') {

@@ -1,6 +1,6 @@
 const { execSync } = require('child_process')
 const assert = require('assert')
-const { readFileSync, writeFileSync } = require('fs')
+const fs = require('fs')
 
 const INTERNAL_VER = '1'
 
@@ -13,14 +13,14 @@ function createPackagejsonFromGit (launcherDir, repoDir, repoFullName) {
 }
 
 function createPackagejson (launcherDir, repoDir, repoFullName, version) {
-  const configStr = readFileSync(`${repoDir}/dist_cfg/config.json`)
+  const configStr = fs.readFileSync(`${repoDir}/dist_cfg/config.json`)
   const config = JSON.parse(configStr)
 
   assert(config.title != null)
 
   const repoDotName = repoFullName.replace(/\//g, '.')
 
-  const packageTemplate = JSON.parse(readFileSync(`${launcherDir}/package.json`).toString())
+  const packageTemplate = JSON.parse(fs.readFileSync(`${launcherDir}/package.json`).toString())
   packageTemplate.name = config.title.replace(/ /g, '-')
   // eslint-disable-next-line no-template-curly-in-string
   packageTemplate.build.artifactName = config.title + '.${ext}' // '' is used on purpose, we want the spring to contain ${ext} as text
@@ -28,7 +28,7 @@ function createPackagejson (launcherDir, repoDir, repoFullName, version) {
   packageTemplate.build.appId = `com.springrts.launcher.${repoDotName}`
   packageTemplate.build.publish.url = `https://spring-launcher.ams3.digitaloceanspaces.com/${repoFullName}`
 
-  writeFileSync(`${repoDir}/package.json`, JSON.stringify(packageTemplate), 'utf8')
+  fs.writeFileSync(`${repoDir}/package.json`, JSON.stringify(packageTemplate), 'utf8')
 }
 
 module.exports = {

@@ -44,7 +44,7 @@ module.exports = app => {
   app.log('App loaded!')
 
   app.on(`*`, async context => {
-    app.log('MY LOG', {event: context.event, action: context.payload.action})
+    app.log('MY LOG', { event: context.event, action: context.payload.action })
   })
 
   // TODO: There should be some way to obtain all the event data on startup

@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const Repository = require('../models/repository')
 
+const { updatePackageInfo } = require('./build_steps/update_package_info')
 const { processBuild } = require('./process_build')
 
 async function runBuilder () {
@@ -68,13 +69,15 @@ async function runQueries () {
   // There should be only one build returned
   // assert(repo.builds.length == 1);
   console.log(`One queued repo: ${repo.full_name}`)
-  console.log(repo.builds[0])
+  const build = repo.builds[0]
+  console.log(build)
 
   try {
     const gitUrl = `https://github.com/${repo.full_name}.git`
-    processBuild(repo.full_name, gitUrl)
+    const packageInfo = processBuild(repo.full_name, gitUrl)
+    updatePackageInfo(build, packageInfo)
   } catch (err) {
-    reportBuildFailure(repo.builds[0], err.message)
+    reportBuildFailure(build, err.message)
   }
 
   return true

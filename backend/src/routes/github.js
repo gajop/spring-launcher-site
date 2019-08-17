@@ -67,11 +67,11 @@ router.post('/auth/validate', (req, res, next) => {
           const github_nick = result.data.login
           const github_avatar_url = result.data.avatar_url
 
-        // User.findOneAndUpdate(
-        //   { github_nick: github_nick },
-        //   { github_nick: github_nick, nick: github_nick, github_avatar_url: github_avatar_url},
-        //   { upsert: true, new: true, setDefaultsOnInsert: true }
-        // )
+          // User.findOneAndUpdate(
+          //   { github_nick: github_nick },
+          //   { github_nick: github_nick, nick: github_nick, github_avatar_url: github_avatar_url},
+          //   { upsert: true, new: true, setDefaultsOnInsert: true }
+          // )
 
           const user = new User({
             github_nick: github_nick,
@@ -84,10 +84,10 @@ router.post('/auth/validate', (req, res, next) => {
           })
 
           const token = jwt.sign(
-          { github_nick: github_nick },
-          JWT_SECRET,
-          { expiresIn: '1h' }
-        )
+            { github_nick: github_nick },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+          )
 
           res.status(200).json({
             token: token,

@@ -1,16 +1,18 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
 
 module.exports = mongoose.model('Repository', mongoose.Schema({
-  github_id: { type: Number, required: true},
+  // Git repo information
+  github_id: { type: Number, required: true },
   full_name: { type: String, required: true },
   name: { type: String, required: false },
 
+  // dist_cfg/config.json
   image_url: { type: String, required: false },
   site_url: { type: String, required: false },
+  title: { type: String, required: false },
 
   installation: {
-    id: { type: Number, required: true},
+    id: { type: Number, required: true },
     url: { type: String, required: true }
   },
 
