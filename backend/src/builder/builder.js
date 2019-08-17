@@ -74,7 +74,7 @@ async function runQueries () {
 
   try {
     const gitUrl = `https://github.com/${repo.full_name}.git`
-    const packageInfo = processBuild(repo.full_name, gitUrl)
+    const packageInfo = processBuild(repo.full_name, gitUrl, 'repo', 'build')
     updatePackageInfo(build, packageInfo)
   } catch (err) {
     reportBuildFailure(build, err.message)

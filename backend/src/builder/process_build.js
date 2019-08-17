@@ -8,7 +8,7 @@ const { uploadBuild } = require('./build_steps/upload_build')
 const { parsePackageInfo } = require('./build_steps/parse_package_info')
 
 function processBuild (repoFullName, gitUrl, repoPrefix, buildPrefix) {
-  console.log(`Cloning repositories...`)
+  console.log('Cloning repositories...')
   const repoDir = `${repoPrefix}/${repoFullName}`
   const launcherDir = `${repoPrefix}/spring-launcher`
   const buildDir = `${buildPrefix}/${repoFullName}`

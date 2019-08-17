@@ -5,10 +5,10 @@ const fs = require('fs')
 const INTERNAL_VER = '1'
 
 function createPackagejsonFromGit (launcherDir, repoDir, repoFullName) {
-  console.log('Creating package.json')
+  console.log('Creating package.json...')
   const version = `${INTERNAL_VER}.` +
   execSync('git rev-list --count HEAD', { cwd: repoDir }).toString().trim() + '.0'
-  console.log('version: ', version)
+  console.log(`Version: ${version}`)
   createPackagejson(launcherDir, repoDir, repoFullName, version)
 }
 
