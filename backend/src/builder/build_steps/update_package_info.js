@@ -5,7 +5,7 @@ async function updatePackageInfo (build, packageInfo) {
   const update = { $set: {
     title: packageInfo.title,
 
-    download_links: packageInfo.download_links
+    download_links: packageInfo.downloadLinks
   } }
   await Repository.findOneAndUpdate(query, update).exec()
 }
