@@ -65,11 +65,7 @@ test('ok-build-repo-3', () => {
   clone('https://github.com/gajop/spring-launcher.git', launcherDir)
   createPackagejsonFromGit(launcherDir, repoDir, 'test-repo')
   const packageInfo = parsePackageInfo(repoDir)
-  var buildTypes = ['windows', 'linux']
-  if (packageInfo.hasPortable) {
-    buildTypes.push('windows-portable')
-  }
-  buildRepository(repoDir, launcherDir, buildDir, buildTypes)
+  buildRepository(repoDir, launcherDir, buildDir, packageInfo.buildTypes)
 
   const distDir = path.join(buildDir, 'dist')
   expect(fs.existsSync(path.join(distDir, 'latest-linux.yml'))).toBe(true)

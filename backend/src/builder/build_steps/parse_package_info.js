@@ -1,3 +1,5 @@
+'use strict'
+
 const assert = require('assert')
 const { readFileSync } = require('fs')
 
@@ -14,9 +16,32 @@ function parsePackageInfo (repoDir) {
     }
   }
 
+  var buildTypes = ['windows', 'linux']
+  if (hasPortable) {
+    buildTypes.push('windows-portable')
+  }
+
+  var downloadLinks = []
+  for (const buildType of buildTypes) {
+    var link = ''
+    if (buildType === 'linux') {
+      link = `${config.title}.AppImage`
+    } else if (buildTypes === 'windows-portable') {
+      link = `${config.title}-portable.exe`
+    } else if (buildTypes === 'windows') {
+      link = `${config.title}.exe`
+    }
+
+    downloadLinks.push({
+      platform: buildType,
+      link: link
+    })
+  }
+
   return {
     title: config.title,
-    hasPortable: hasPortable
+    buildTypes: buildTypes,
+    downloadLinks: downloadLinks
   }
 }
 

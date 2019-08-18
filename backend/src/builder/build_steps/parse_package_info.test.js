@@ -27,6 +27,6 @@ test('ok-parse-package-info-1', () => {
   createPackagejsonFromGit(launcherDir, repoDir, 'test-repo')
   const packageInfo = parsePackageInfo(repoDir)
 
-  expect(packageInfo.hasPortable).toBe(true)
+  expect(packageInfo.buildTypes.includes('windows-portable')).toBe(true)
   expect(packageInfo.title).toBe('Test-Title')
 })

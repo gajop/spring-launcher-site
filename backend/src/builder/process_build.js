@@ -17,11 +17,14 @@ function processBuild (repoFullName, gitUrl, repoPrefix, buildPrefix) {
   clone('https://github.com/gajop/spring-launcher.git', launcherDir)
   createPackagejsonFromGit(launcherDir, repoDir, repoFullName)
   const packageInfo = parsePackageInfo(repoDir)
-  var buildTypes = ['windows', 'linux']
-  if (packageInfo.hasPortable) {
-    buildTypes.push('windows-portable')
+
+  var fullDownloadLinks = []
+  for (var downloadLink of packageInfo.downloadLinks) {
+    fullDownloadLinks.push(`${repoFullName}/${downloadLink}`)
   }
-  buildRepository(repoDir, launcherDir, buildDir, buildTypes)
+  packageInfo.downloadLinks = fullDownloadLinks
+
+  buildRepository(repoDir, launcherDir, buildDir, packageInfo.buildTypes)
   uploadBuild(buildDir, repoFullName)
   return packageInfo
 }

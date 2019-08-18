@@ -16,6 +16,11 @@ module.exports = mongoose.model('Repository', mongoose.Schema({
     url: { type: String, required: true }
   },
 
+  download_links: [{
+    platform: { type: String, required: true },
+    link: { type: String, required: true }
+  }],
+
   builds: [{
     // commit info
     commit: {
