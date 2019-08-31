@@ -1,10 +1,16 @@
 <ul class="games">
+  Games:
   <li *ngFor="let game of games" type=[Game]>
-    <span class="repo_title">{{game.name}}</span>
+    <span class="repo_title">{{game.title}}</span>
+    <span class="repo_title">{{game.full_name}}</span>
     <!-- <fa-icon icon="coffee"></fa-icon> -->
     <div class="dl_links">
-      <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faWindows">Windows</fa-icon></a>
-      <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faLinux">Linux</fa-icon></a>
+      <li *ngFor="let download_link of game.download_links" type=[DownloadLink]>
+
+          download_link.platform
+        <a class='link' href='{{download_link.link}}'><fa-icon [icon]="faWindows">Windows</fa-icon></a>
+          <!-- <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faLinux">Linux</fa-icon></a> -->
+      </li>
       <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faGithub">Github</fa-icon></a>
       <a class='link' href='http://logs.springrts.com/tags/{{game.name}}/'>User logs</a>
     </div>

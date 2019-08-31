@@ -1,10 +1,17 @@
 export interface Game {
   name: string;
+  title: string;
   full_name: string;
   builds: Build[];
+  download_links: DownloadLink[];
 
   // processed
   game_title: string;
+}
+
+interface DownloadLink {
+  platform: string;
+  link: string;
 }
 
 interface Build {

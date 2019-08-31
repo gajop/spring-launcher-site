@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
 import { Game } from '../game.model';
 
-
 import { faGithub, faLinux, faWindows } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
@@ -11,17 +10,21 @@ import { faGithub, faLinux, faWindows } from '@fortawesome/free-brands-svg-icons
   styleUrls: ['./game-list.component.css']
 })
 export class GameListComponent implements OnInit {
-  private games: Game[] = [];
+  public games: Game[] = [];
 
-  private faGithub = faGithub;
-  private faLinux = faLinux;
-  private faWindows = faWindows;
+  public faGithub = faGithub;
+  public faLinux = faLinux;
+  public faWindows = faWindows;
 
   constructor(public gameService: GameService) { }
 
   ngOnInit() {
     this.gameService.getAllRepos().subscribe(games => {
       this.games = games;
+      for (const game of games) {
+        console.log(game);
+        console.log(game.download_links);
+      }
     });
   }
 
