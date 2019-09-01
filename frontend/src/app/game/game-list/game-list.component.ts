@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
 import { Game } from '../game.model';
 
+import { environment } from '../../../environments/environment';
+
 import { faGithub, faLinux, faWindows } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
@@ -23,7 +25,11 @@ export class GameListComponent implements OnInit {
       this.games = games;
       for (const game of games) {
         console.log(game);
-        console.log(game.download_links);
+        if (game.download_links !== null) {
+          for (const downloadLink of game.download_links) {
+            downloadLink.link = `${environment.dlUrl}${downloadLink.link}`;
+          }
+        }
       }
     });
   }

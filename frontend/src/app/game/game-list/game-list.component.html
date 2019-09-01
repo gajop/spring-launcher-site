@@ -6,10 +6,17 @@
     <!-- <fa-icon icon="coffee"></fa-icon> -->
     <div class="dl_links">
       <li *ngFor="let download_link of game.download_links" type=[DownloadLink]>
-
-          download_link.platform
-        <a class='link' href='{{download_link.link}}'><fa-icon [icon]="faWindows">Windows</fa-icon></a>
-          <!-- <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faLinux">Linux</fa-icon></a> -->
+        <a class='link' href='{{download_link.link}}' [ngSwitch]="download_link.platform">
+          <div *ngSwitchCase="'linux'" >
+              Linux<fa-icon [icon]="faLinux">Linux</fa-icon>
+          </div>
+          <div *ngSwitchCase="'windows'" >
+              Windows<fa-icon [icon]="faWindows">Windows</fa-icon>
+          </div>
+          <div *ngSwitchCase="'windows-portable'" >
+              Windows-Portable<fa-icon [icon]="faWindows">Windows-Portable</fa-icon>
+          </div>
+        </a>
       </li>
       <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faGithub">Github</fa-icon></a>
       <a class='link' href='http://logs.springrts.com/tags/{{game.name}}/'>User logs</a>
