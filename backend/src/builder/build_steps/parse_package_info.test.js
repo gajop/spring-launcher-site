@@ -26,7 +26,21 @@ test('ok-parse-package-info-1', () => {
   clone('https://github.com/gajop/spring-launcher.git', launcherDir)
   createPackagejsonFromGit(launcherDir, repoDir, 'test-repo')
   const packageInfo = parsePackageInfo(repoDir)
+  for (const downloadLink of packageInfo.downloadLinks) {
+    downloadLink.link = `gajop/test-repo/${downloadLink.link}`
+  }
 
   expect(packageInfo.buildTypes.includes('windows-portable')).toBe(true)
   expect(packageInfo.title).toBe('Test-Title')
+
+  expect(packageInfo.downloadLinks.length).toBe(3)
+  for (const downloadLink of packageInfo.downloadLinks) {
+    if (downloadLink.platform === 'linux') {
+      expect(downloadLink.link).toBe('gajop/test-repo/Test-Title.AppImage')
+    } else if (downloadLink.platform === 'windows') {
+      expect(downloadLink.link).toBe('gajop/test-repo/Test-Title.exe')
+    } else if (downloadLink.platform === 'windows-portable') {
+      expect(downloadLink.link).toBe('gajop/test-repo/Test-Title-portable.exe')
+    }
+  }
 })

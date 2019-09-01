@@ -26,10 +26,12 @@ function parsePackageInfo (repoDir) {
     var link = ''
     if (buildType === 'linux') {
       link = `${config.title}.AppImage`
-    } else if (buildTypes === 'windows-portable') {
+    } else if (buildType === 'windows-portable') {
       link = `${config.title}-portable.exe`
-    } else if (buildTypes === 'windows') {
+    } else if (buildType === 'windows') {
       link = `${config.title}.exe`
+    } else {
+      throw new `Unexpected buildType: ${buildType}`()
     }
 
     downloadLinks.push({

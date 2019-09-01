@@ -17,12 +17,9 @@ function processBuild (repoFullName, gitUrl, repoPrefix, buildPrefix) {
   clone('https://github.com/gajop/spring-launcher.git', launcherDir)
   createPackagejsonFromGit(launcherDir, repoDir, repoFullName)
   const packageInfo = parsePackageInfo(repoDir)
-
-  var fullDownloadLinks = []
-  for (var downloadLink of packageInfo.downloadLinks) {
-    fullDownloadLinks.push(`${repoFullName}/${downloadLink}`)
+  for (const downloadLink of packageInfo.downloadLinks) {
+    downloadLink.link = `${repoFullName}/${downloadLink.link}`
   }
-  packageInfo.downloadLinks = fullDownloadLinks
 
   buildRepository(repoDir, launcherDir, buildDir, packageInfo.buildTypes)
   uploadBuild(buildDir, repoFullName)
