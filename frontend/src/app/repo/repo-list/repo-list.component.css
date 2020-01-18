@@ -1,7 +1,7 @@
 .games-block {
   margin-right: auto;
   margin-left: auto;
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 .game {
@@ -21,4 +21,8 @@
 
 .download-link {
   padding-right: 10px;
+}
+
+.avatar {
+  margin-right: 5px;
 }

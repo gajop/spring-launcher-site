@@ -1,25 +1,28 @@
-<ul class="games">
-  Games:
-  <li *ngFor="let game of games" type=[Game]>
-    <span class="repo_title">{{game.title}}</span>
-    <span class="repo_title">{{game.full_name}}</span>
-    <!-- <fa-icon icon="coffee"></fa-icon> -->
-    <div class="dl_links">
-      <li *ngFor="let download_link of game.download_links" type=[DownloadLink]>
-        <a class='link' href='{{download_link.link}}' [ngSwitch]="download_link.platform">
-          <div *ngSwitchCase="'linux'" >
-              Linux<fa-icon [icon]="faLinux">Linux</fa-icon>
-          </div>
-          <div *ngSwitchCase="'windows'" >
-              Windows<fa-icon [icon]="faWindows">Windows</fa-icon>
-          </div>
-          <div *ngSwitchCase="'windows-portable'" >
-              Windows-Portable<fa-icon [icon]="faWindows">Windows-Portable</fa-icon>
-          </div>
-        </a>
-      </li>
-      <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faGithub">Github</fa-icon></a>
-      <a class='link' href='http://logs.springrts.com/tags/{{game.name}}/'>User logs</a>
+<p>Games</p>
+<div class="col-md-12 games-block">
+  <div *ngIf="!loaded" class="text-center">
+    <div class="spinner-border ml-auto" role="status" aria-hidden="true">
     </div>
-  </li>
-</ul>
+  </div>
+  <div class="game-list" *ngIf="loaded">
+    <div class="row game" *ngFor="let game of games">
+      <div class="col-md-4 game-title-block">
+        <p>{{game.full_name}}</p>
+      </div>
+      <div class="col-md-4 downloads">
+        <a class='download-link' href='{{download_link.link}}' [ngSwitch]="download_link.platform" *ngFor="let download_link of game.download_links">
+          <fa-icon [icon]="faLinux" *ngSwitchCase="'linux'">Linux</fa-icon>
+          <fa-icon *ngSwitchCase="'windows'" [icon]="faWindows">Windows</fa-icon>
+          <fa-icon *ngSwitchCase="'windows-portable'" [icon]="faWindows">Windows-Portable</fa-icon>
+        </a>
+        <a class='link' href='https://github.com/{{game.full_name}}'><fa-icon [icon]="faGithub">Github</fa-icon></a>
+      </div>
+      <div class="col-md-2">
+        <a class='link' href='http://logs.springrts.com/tags/{{game.name}}/'>User logs</a>
+      </div>
+      <div class="col-md-2">
+        <span>Updated: {{getGameBuildTime(game) | date:'medium' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

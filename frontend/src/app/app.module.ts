@@ -3,8 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatInputModule, MatCardModule,
-         MatButtonModule, MatExpansionModule, MatProgressSpinnerModule } from '@angular/material';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +13,9 @@ import { GameListComponent } from './game/game-list/game-list.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { GameAddComponent } from './game/game-add/game-add.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RepoListComponent } from './repo/repo-list/repo-list.component';
+import { RepoComponent } from './repo/repo/repo.component';
+import { MaxLengthPipe } from './max-length.pipe';
 
 
 @NgModule({
@@ -23,21 +25,16 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     AuthComponent,
     GameListComponent,
     GameAddComponent,
+    RepoListComponent,
+    RepoComponent,
+    MaxLengthPipe,
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-
+    NgbModule,
     HttpClientModule,
-
-    MatInputModule,
-    MatCardModule,
-    MatButtonModule,
-    MatExpansionModule,
-    MatProgressSpinnerModule,
-    MatToolbarModule,
-
     FontAwesomeModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],

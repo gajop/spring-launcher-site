@@ -1,0 +1,52 @@
+<p>Repositories</p>
+<div class="col-md-12 games-block">
+  <div *ngIf="!loaded" class="text-center">
+    <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+  </div>
+  <div class="game-list" *ngIf="loaded">
+    <div class="row game" *ngFor="let game of games">
+      <div
+        class="col-md-4 game-title-block"
+        [routerLink]="[game.full_name]"
+        routerLinkActive="router-link-active"
+      >
+        <div class="row">
+          <img
+            class="avatar"
+            src="{{ getGameAvatarLink(game) }}"
+            width="32"
+            height="32"
+          />
+          <p>{{ game.full_name }}</p>
+        </div>
+      </div>
+      <div class="col-md-4 downloads">
+        <a
+          class="download-link"
+          href="{{ download_link.link }}"
+          [ngSwitch]="download_link.platform"
+          *ngFor="let download_link of game.download_links"
+        >
+          <fa-icon [icon]="faLinux" *ngSwitchCase="'linux'">Linux</fa-icon>
+          <fa-icon *ngSwitchCase="'windows'" [icon]="faWindows"
+            >Windows</fa-icon
+          >
+          <fa-icon *ngSwitchCase="'windows-portable'" [icon]="faWindows"
+            >Windows-Portable</fa-icon
+          >
+        </a>
+        <a class="link" href="https://github.com/{{ game.full_name }}"
+          ><fa-icon [icon]="faGithub">Github</fa-icon></a
+        >
+      </div>
+      <div class="col-md-2">
+        <a class="link" href="http://logs.springrts.com/tags/{{ game.name }}/"
+          >User logs</a
+        >
+      </div>
+      <div class="col-md-2">
+        <span>Updated: {{ getGameBuildTime(game) | date: "medium" }}</span>
+      </div>
+    </div>
+  </div>
+</div>
