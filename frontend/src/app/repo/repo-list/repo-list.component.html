@@ -1,5 +1,5 @@
-<p>Repositories</p>
 <div class="col-md-12 games-block">
+  <p>Repositories</p>
   <div *ngIf="!loaded" class="text-center">
     <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
   </div>
@@ -40,8 +40,8 @@
         >
       </div>
       <div class="col-md-2">
-        <a class="link" href="http://logs.springrts.com/tags/{{ game.name }}/"
-          >User logs</a
+        <a class="link" href="http://logs.springrts.com/tags/{{ game.title }}/"
+        *ngIf="game.title">User logs</a
         >
       </div>
       <div class="col-md-2">

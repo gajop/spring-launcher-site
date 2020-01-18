@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+
+import {faGithub} from '@fortawesome/free-brands-svg-icons';
+
 import { AuthService } from './auth.service';
 
 @Component({
@@ -9,7 +12,8 @@ import { AuthService } from './auth.service';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
-  isLoading = false;
+  loaded = true;
+  faGithub = faGithub;
 
   constructor(public http: HttpClient,
               private activatedRoute: ActivatedRoute,
@@ -27,7 +31,7 @@ export class AuthComponent implements OnInit {
   }
 
   onAuthGithub() {
-    this.isLoading = true;
+    this.loaded = false;
     this.authService.authGithub();
   }
 

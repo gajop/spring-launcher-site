@@ -1,9 +1,10 @@
-<!-- <mat-card>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <div class="providers" *ngIf="!isLoading">
-    <div class="provider">
-      <h2>Authenticate with Github</h2>
-      <button mat-raised-button color="primary" (click)="onAuthGithub()">Authenticate</button>
-    </div>
-  </div>
-</mat-card> -->
+<div *ngIf="!isLoading">
+  <p>This site uses Github for authorization. Authenticating to manage Spring-Launcher install on your repositories.</p>
+  <button class="btn btn-primary btn-lg" type="button" *ngIf="loaded" (click)="onAuthGithub()">
+    <fa-icon [icon]="faGithub">Github</fa-icon>  | Login with Github
+  </button>
+  <button class="btn btn-primary btn-lg" type="button" disabled *ngIf="!loaded">
+    <fa-icon [icon]="faGithub">Github</fa-icon>  | Login with Github
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  </button>  
+</div>

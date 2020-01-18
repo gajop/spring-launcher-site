@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { User } from './user.model';
 import { Subject } from 'rxjs';
+
+import { User } from './user.model';
+import { environment } from '../../environments/environment';
+
+const API_URL = environment.apiUrl;
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -25,7 +29,7 @@ export class AuthService {
     this.http.get<{nick: string, github_nick: string,
                     github_avatar_url: string,
                     github_access_token: string}>(
-      'http://localhost:3000/api/user').subscribe(res => {
+      `${API_URL}/user`).subscribe(res => {
         this.user = {
           nick: res.nick,
           github_nick: res.github_nick,
@@ -89,15 +93,15 @@ export class AuthService {
      return;
    }
    return {
-     jwtToken: jwtToken,
+     jwtToken,
      expirationDate: new Date(jwtTokenExpirationDate)
    };
   }
 
   validate(code: string, state: string) {
     this.http.post<{token: string, expiresIn: number}>(
-      'http://localhost:3000/api/github/auth/validate',
-      { code: code })
+      `${API_URL}/github/auth/validate`,
+      { code })
       .subscribe(res => {
         this.jwtToken = res.token;
         if (!this.jwtToken) {
@@ -123,7 +127,7 @@ export class AuthService {
 
   authGithub() {
     this.http.get<{client_id: string, scopes: string, state: string}>(
-      'http://localhost:3000/api/github/auth/token').
+      `${API_URL}/github/auth/token`).
       subscribe(res => {
         const client_id = res.client_id;
         const scopes = res.scopes;

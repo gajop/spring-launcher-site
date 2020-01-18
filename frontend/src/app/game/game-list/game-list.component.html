@@ -1,10 +1,11 @@
-<p>Games</p>
 <div class="col-md-12 games-block">
+  <p>Games</p>
   <div *ngIf="!loaded" class="text-center">
     <div class="spinner-border ml-auto" role="status" aria-hidden="true">
     </div>
   </div>
-  <div class="game-list" *ngIf="loaded">
+  <!-- 
+    <div class="game-list" *ngIf="loaded">
     <div class="row game" *ngFor="let game of games">
       <div class="col-md-4 game-title-block">
         <p>{{game.full_name}}</p>
@@ -23,6 +24,22 @@
       <div class="col-md-2">
         <span>Updated: {{getGameBuildTime(game) | date:'medium' }}</span>
       </div>
+    </div> -->
+
+    <div class="row">
+     <div class="col-4" style="background-color: aqua; border: black 1px solid;" *ngFor="let game of games">
+        test111111111
+      </div>
     </div>
-  </div>
+    <div class="row" *ngIf="loaded">
+      <div class="col-4" *ngFor="let game of getGamesWithTitles()">
+        <div  style="background-color: aqua; border: black 1px solid;">
+          <p>{{game.title}}</p>
+          <!-- <img
+          class="img-fluid"
+          src="{{ getGameAvatarLink(game) }}"
+          /> -->
+        </div>
+      </div>
+    </div>
 </div>

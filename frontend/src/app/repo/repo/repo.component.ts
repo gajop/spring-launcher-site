@@ -40,10 +40,14 @@ export class RepoComponent implements OnInit {
         this.game.full_name.split('/')[0]}.png?size=200`;
   }
 
-  getGameBuildTime(game: Game): Date {
-    if (game.builds.length === 0) {
+  getGameBuildTime(): Date {
+    if (this.game.builds.length === 0) {
       return;
     }
-    return game.builds[game.builds.length - 1].build_info.created_time;
+    return this.game.builds[this.game.builds.length - 1].build_info.created_time;
+  }
+
+  getGameRepoNamePart(): string {
+    return this.game.full_name.split('/')[1];
   }
 }

@@ -38,4 +38,15 @@ export class GameListComponent implements OnInit {
     }
     return game.builds[game.builds.length - 1].build_info.created_time;
   }
+
+  getGameAvatarLink(game: Game) {
+    return `https://github.com/${game.full_name.split('/')[0]}.png?size=128`
+  }
+
+  getGamesWithTitles(): Game[] {
+    return this.games.filter((game: Game) => {
+      return game.title != "";
+    });
+  }
+
 }
