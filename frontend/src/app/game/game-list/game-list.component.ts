@@ -1,19 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { environment } from "../../../environments/environment";
+import {Component, OnInit} from '@angular/core';
+import {faGithub, faLinux, faWindows} from '@fortawesome/free-brands-svg-icons';
 
-import { GameService } from "../game.service";
-import { Game } from "../game.model";
-
-import {
-  faGithub,
-  faLinux,
-  faWindows
-} from "@fortawesome/free-brands-svg-icons";
+import {environment} from '../../../environments/environment';
+import {Game} from '../game.model';
+import {GameService} from '../game.service';
 
 @Component({
-  selector: "app-game-list",
-  templateUrl: "./game-list.component.html",
-  styleUrls: ["./game-list.component.css"]
+  selector: 'app-game-list',
+  templateUrl: './game-list.component.html',
+  styleUrls: ['./game-list.component.css']
 })
 export class GameListComponent implements OnInit {
   games: Game[] = [];
@@ -45,8 +40,7 @@ export class GameListComponent implements OnInit {
 
   getGamesWithTitles(): Game[] {
     return this.games.filter((game: Game) => {
-      return game.title != "";
+      return game.title != null;
     });
   }
-
 }

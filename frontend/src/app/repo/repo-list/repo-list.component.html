@@ -5,11 +5,7 @@
   </div>
   <div class="game-list" *ngIf="loaded">
     <div class="row game" *ngFor="let game of games">
-      <div
-        class="col-md-4 game-title-block"
-        [routerLink]="[game.full_name]"
-        routerLinkActive="router-link-active"
-      >
+      <div class="col-md-4 game-title-block" [routerLink]="[game.full_name]">
         <div class="row">
           <img
             class="avatar"
@@ -40,8 +36,11 @@
         >
       </div>
       <div class="col-md-2">
-        <a class="link" href="http://logs.springrts.com/tags/{{ game.title }}/"
-        *ngIf="game.title">User logs</a
+        <a
+          class="link"
+          href="http://logs.springrts.com/tags/{{ game.title }}/"
+          *ngIf="game.title"
+          >User logs</a
         >
       </div>
       <div class="col-md-2">
