@@ -40,11 +40,16 @@ export class RepoComponent implements OnInit {
         this.game.full_name.split('/')[0]}.png?size=200`;
   }
 
+  getUserAvatarLink(username: string) {
+    return `https://github.com/${username}.png?size=24`;
+  }
+
   getGameBuildTime(): Date {
     if (this.game.builds.length === 0) {
       return;
     }
-    return this.game.builds[this.game.builds.length - 1].build_info.created_time;
+    return this.game.builds[this.game.builds.length - 1]
+        .build_info.created_time;
   }
 
   getGameRepoNamePart(): string {

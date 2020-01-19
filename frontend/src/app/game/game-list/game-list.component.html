@@ -1,5 +1,4 @@
 <div class="col-md-12 games-block">
-  <p>Games</p>
   <div *ngIf="!loaded" class="text-center">
     <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
   </div>
@@ -25,19 +24,22 @@
       </div>
     </div> -->
 
-  <div class="row" *ngIf="loaded">
-    <a
-      class="col-4 border"
-      *ngFor="let game of getGamesWithTitles()"
-      [routerLink]="[game.full_name]"
-    >
-      <p>{{ game.title }}</p>
-      <img
-        class="img-fluid"
-        src="{{ getGameAvatarLink(game) }}"
-        width="128"
-        height="128"
-      />
-    </a>
+  <div class="games-block" *ngIf="loaded">
+    <p>Games</p>
+    <div class="row">
+      <a
+        class="col-4 border game-block"
+        *ngFor="let game of getGamesWithTitles()"
+        [routerLink]="[game.full_name]"
+      >
+        <p>{{ game.title }}</p>
+        <img
+          class="img-fluid"
+          src="{{ getGameAvatarLink(game) }}"
+          width="128"
+          height="128"
+        />
+      </a>
+    </div>
   </div>
 </div>

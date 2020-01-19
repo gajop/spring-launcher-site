@@ -3,12 +3,23 @@
   margin-left: auto;
   max-width: 800px;
 }
-/* 
+/*
 .game-block {
   border: 1px grey solid;
   margin-bottom: 10px;
   padding: 10px;
 } */
+
+.game-block {
+  background-color: rgb(42, 41, 41);
+  text-decoration: none;
+}
+
+.game-block:hover {
+  transition: transform 0.1s;
+  transform: scale(1.05);
+  z-index: 1;
+}
 
 .game-title-block {
   padding-top: 0px;

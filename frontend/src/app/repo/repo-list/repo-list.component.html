@@ -1,9 +1,9 @@
 <div class="col-md-12 games-block">
-  <p>Repositories</p>
   <div *ngIf="!loaded" class="text-center">
     <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
   </div>
-  <div class="game-list" *ngIf="loaded">
+  <div class="repo-block" *ngIf="loaded">
+    <p>Repositories</p>
     <div class="row game" *ngFor="let game of games">
       <div class="col-md-4 game-title-block" [routerLink]="[game.full_name]">
         <div class="row">
@@ -27,8 +27,9 @@
           <fa-icon *ngSwitchCase="'windows'" [icon]="faWindows"
             >Windows</fa-icon
           >
-          <fa-icon *ngSwitchCase="'windows-portable'" [icon]="faWindows"
-            >Windows-Portable</fa-icon
+          <span *ngSwitchCase="'windows-portable'"
+            ><fa-icon [icon]="faWindows">Windows-Portable</fa-icon
+            ><sub>P</sub></span
           >
         </a>
         <a class="link" href="https://github.com/{{ game.full_name }}"
@@ -44,7 +45,7 @@
         >
       </div>
       <div class="col-md-2">
-        <span>Updated: {{ getGameBuildTime(game) | date: "medium" }}</span>
+        <span>Updated: {{ getGameBuildTime(game) | userFriendlyDate }}</span>
       </div>
     </div>
   </div>

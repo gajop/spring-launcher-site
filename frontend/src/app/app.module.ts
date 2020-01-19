@@ -13,9 +13,10 @@ import {GameAddComponent} from './game/game-add/game-add.component';
 import {GameListComponent} from './game/game-list/game-list.component';
 import {GameComponent} from './game/game/game.component';
 import {HeaderComponent} from './header/header.component';
-import {MaxLengthPipe} from './max-length.pipe';
 import {RepoListComponent} from './repo/repo-list/repo-list.component';
 import {RepoComponent} from './repo/repo/repo.component';
+import {MaxLengthPipe} from './util/max-length.pipe';
+import {UserFriendlyDatePipe} from './util/user-friendly-date.pipe';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {RepoComponent} from './repo/repo/repo.component';
     RepoListComponent,
     RepoComponent,
     MaxLengthPipe,
+    UserFriendlyDatePipe,
   ],
   imports: [
     AppRoutingModule, BrowserModule, BrowserAnimationsModule, NgbModule,

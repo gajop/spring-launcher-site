@@ -61,7 +61,13 @@
               href="https://github.com/{{ build.commit.committer.username }}"
               target="_blank"
               class="user"
-              >{{ build.commit.committer.username }}</a
+            >
+              <img
+                src="{{ getUserAvatarLink(build.commit.committer.username) }}"
+                width="24"
+                height="24"
+              />
+              {{ build.commit.committer.username }}</a
             >
           </div>
         </div>
@@ -75,14 +81,14 @@
           >
 
           <div class="row">
-            {{ build.build_info.created_time | date: "short" }}
+            {{ build.build_info.created_time | userFriendlyDate }}
           </div>
-          <div class="row">
+          <!-- <div class="row">
             {{ build.build_info.started_time | date: "short" }}
           </div>
           <div class="row">
             {{ build.build_info.ended_time | date: "short" }}
-          </div>
+          </div> -->
           <div class="row">
             <p class="alert-danger">{{ build.build_info.err_msg }}</p>
           </div>
