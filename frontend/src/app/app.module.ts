@@ -1,3 +1,4 @@
+import {DatePipe} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
@@ -36,8 +37,10 @@ import {UserFriendlyDatePipe} from './util/user-friendly-date.pipe';
     AppRoutingModule, BrowserModule, BrowserAnimationsModule, NgbModule,
     HttpClientModule, FontAwesomeModule
   ],
-  providers:
-      [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    DatePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

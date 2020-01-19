@@ -1,4 +1,6 @@
+import {DatePipe} from '@angular/common'
 import {Pipe, PipeTransform} from '@angular/core';
+
 
 const intervals = [['minute', 60], ['hour', 3600], ['day', 86400]];
 
@@ -59,7 +61,7 @@ export class UserFriendlyDatePipe implements PipeTransform {
       return `${hoursAgo} hours ${minutesStr} ago`;
     }
 
-    const daysAgo = Math.floor(minutesAgo / 24);
+    const daysAgo = Math.floor(hoursAgo / 24);
     if (daysAgo < 5) {
       let hoursStr = '';
       switch (hoursAgo % 60) {
@@ -83,6 +85,8 @@ export class UserFriendlyDatePipe implements PipeTransform {
       return `${daysAgo} days ago`;
     }
 
-    return new Date(date).toLocaleDateString();
+    return this.datepipe.transform(date);
   }
+
+  constructor(public datepipe: DatePipe) {}
 }

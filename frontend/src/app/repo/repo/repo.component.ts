@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {faGithub, faLinux, faWindows} from '@fortawesome/free-brands-svg-icons';
-import {Game} from 'src/app/game/game.model';
+import {Build, Game} from 'src/app/game/game.model';
 import {GameService} from 'src/app/game/game.service';
 
 @Component({
@@ -54,5 +54,9 @@ export class RepoComponent implements OnInit {
 
   getGameRepoNamePart(): string {
     return this.game.full_name.split('/')[1];
+  }
+
+  buildsByNewest(): Build[] {
+    return this.game.builds.slice().reverse();
   }
 }

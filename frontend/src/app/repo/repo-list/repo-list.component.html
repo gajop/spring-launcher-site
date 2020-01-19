@@ -44,7 +44,7 @@
           >User logs</a
         >
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" *ngIf="game.builds.length > 0">
         <span>Updated: {{ getGameBuildTime(game) | userFriendlyDate }}</span>
       </div>
     </div>

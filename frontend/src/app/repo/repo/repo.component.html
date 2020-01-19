@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<div class="repo-block col-md-12" *ngIf="loaded">
+<div class="repo-block" *ngIf="loaded">
   <div class="row">
     <img src="{{ getGameAvatarLink() }}" width="100" height="100" />
     <a
@@ -18,87 +18,82 @@
   <div class="downloads">
     <h4 class="row">Downloads:</h4>
     <a
-      class="download-link row"
+      class="download-link"
       href="{{ download_link.link }}"
       [ngSwitch]="download_link.platform"
       *ngFor="let download_link of game.download_links"
     >
-      <span *ngSwitchCase="'linux'"
-        ><fa-icon [icon]="faLinux" class="dl-icon">Linux</fa-icon> Linux</span
-      >
-      <div *ngSwitchCase="'windows'">
+      <span *ngSwitchCase="'linux'">
+        <fa-icon [icon]="faLinux" class="dl-icon">Linux</fa-icon> Linux
+      </span>
+      <span *ngSwitchCase="'windows'">
         <fa-icon [icon]="faWindows" class="dl-icon">Windows</fa-icon>Windows
-      </div>
-      <div *ngSwitchCase="'windows-portable'">
+      </span>
+      <span *ngSwitchCase="'windows-portable'">
         <fa-icon [icon]="faWindows" class="dl-icon">Windows-Portable</fa-icon
         >Windows Portable
-      </div>
+      </span>
+      <br />
     </a>
-    <!-- <a class="download-link row" href="https://github.com/{{ game.full_name }}">
-      <fa-icon [icon]="faGithub" class="dl-icon">Github</fa-icon>Github
-    </a> -->
-    <!-- <div class="row log">
-      <a href="http://logs.springrts.com/tags/{{ game.name }}/">User logs</a>
-    </div> -->
+  </div>
 
-    <div class="builds">
-      <div class="row builds-header">
-        <div class="col md-4">
-          <h5>Total builds: {{ game.builds.length }}</h5>
+  <div class="builds">
+    <div class="row builds-header">
+      <div class="col md-4">
+        <h5>Total builds: {{ game.builds.length }}</h5>
+      </div>
+      <div class="col md-4 align-self-end latest">
+        <h5>Latest: {{ getGameBuildTime() | userFriendlyDate }}</h5>
+      </div>
+    </div>
+
+    <div class="row build" *ngFor="let build of buildsByNewest()">
+      <div class="col-md-4 game-title-block">
+        <div class="row">
+          <p>{{ build.commit.message }}</p>
         </div>
-        <div class="col md-4 align-self-end latest">
-          <h5>Latest: {{ getGameBuildTime(game) | date: "medium" }}</h5>
+        <div class="row">
+          <a
+            href="https://github.com/{{ build.commit.committer.username }}"
+            target="_blank"
+            class="user"
+          >
+            <img
+              src="{{ getUserAvatarLink(build.commit.committer.username) }}"
+              width="24"
+              height="24"
+            />
+            {{ build.commit.committer.username }}</a
+          >
         </div>
       </div>
+      <div class="col-md-7">
+        <a
+          href="https://github.com/{{ game.full_name }}/commit/{{
+            build.commit.hash
+          }}"
+          target="_blank"
+          >{{ build.commit.hash }}</a
+        >
 
-      <div class="row build" *ngFor="let build of game.builds.reverse()">
-        <div class="col-md-4 game-title-block">
-          <div class="row">
-            <p>{{ build.commit.message }}</p>
-          </div>
-          <div class="row">
-            <a
-              href="https://github.com/{{ build.commit.committer.username }}"
-              target="_blank"
-              class="user"
-            >
-              <img
-                src="{{ getUserAvatarLink(build.commit.committer.username) }}"
-                width="24"
-                height="24"
-              />
-              {{ build.commit.committer.username }}</a
-            >
-          </div>
+        <div class="row">
+          {{ build.build_info.created_time | userFriendlyDate }}
         </div>
-        <div class="col-md-7">
-          <a
-            href="https://github.com/{{ game.full_name }}/commit/{{
-              build.commit.hash
-            }}"
-            target="_blank"
-            >{{ build.commit.hash }}</a
-          >
-
-          <div class="row">
-            {{ build.build_info.created_time | userFriendlyDate }}
-          </div>
-          <!-- <div class="row">
-            {{ build.build_info.started_time | date: "short" }}
-          </div>
-          <div class="row">
-            {{ build.build_info.ended_time | date: "short" }}
-          </div> -->
-          <div class="row">
-            <p class="alert-danger">{{ build.build_info.err_msg }}</p>
-          </div>
+        <!-- <div class="row">
+          {{ build.build_info.started_time | date: "short" }}
         </div>
-        <div [ngSwitch]="build.build_info.status" class="col-md-1">
-          <div *ngSwitchCase="skipped">
-            <p class="skipped">skipped</p>
-          </div>
-          <div *ngSwitchDefault>{{ build.build_info.status }}</div>
+        <div class="row">
+          {{ build.build_info.ended_time | date: "short" }}
+        </div> -->
+        <div class="row">
+          <p class="alert-danger">{{ build.build_info.err_msg }}</p>
         </div>
+      </div>
+      <div [ngSwitch]="build.build_info.status" class="col-md-1">
+        <div *ngSwitchCase="skipped">
+          <p class="skipped">skipped</p>
+        </div>
+        <div *ngSwitchDefault>{{ build.build_info.status }}</div>
       </div>
     </div>
   </div>

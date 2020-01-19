@@ -9,11 +9,12 @@
         class="nav-item nav-link active"
         routerLink="/game"
         routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
         >Games</a
       >
-      <a class="nav-item nav-link" routerLink="/dev" routerLinkActive="active"
+      <!-- <a class="nav-item nav-link" routerLink="/dev" routerLinkActive="active"
         >Developers</a
-      >
+      > -->
       <a class="nav-item nav-link" routerLink="/repo" routerLinkActive="active"
         >Repositories</a
       >

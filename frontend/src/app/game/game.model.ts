@@ -14,7 +14,7 @@ interface DownloadLink {
   link: string;
 }
 
-interface Build {
+export interface Build {
   commit: Commit;
   build_info: BuildInfo;
   result_info: ResultInfo;
