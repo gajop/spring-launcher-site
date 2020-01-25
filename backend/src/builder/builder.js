@@ -26,40 +26,47 @@ async function runBuilder () {
 }
 
 async function runQueries () {
-  var repo
+  let targetBuild = null
+  let repo = null
   try {
-    // First we lock all queued builds (change their status)
-    await Repository.updateOne(
-      { 'builds.build_info.status': 'queued' },
-      { $set: { 'builds.$[].build_info.status': 'queued_lock' } }).exec()
-
-    // Here we query and update one (locked) build query
-    // We change its status to "started" and initialize the build time
-    // We also return the changed query with the repo full name
-    const query = { 'builds.build_info.status': 'queued_lock' }
-    const update = { $set: {
-      'builds.$.build_info.status': 'started',
-      'builds.$.build_info.started_time': Date.now()
-    } }
-    repo = await Repository.findOneAndUpdate(
-      query,
-      update,
-      {
-        sort: { 'builds.build_info.created_time': -1 },
-        projection: { full_name: 1, 'builds.$': 1 }
-      }
+    // Find one and lock its status
+    const query = { 'builds.build_info.status': 'queued' }
+    repo = await Repository.findOne(
+      query
     ).exec()
     if (repo == null) {
+      return
+    }
+
+    let newestDate = null
+    for (const build of repo.builds) {
+      if (build.build_info.status !== 'queued') {
+        continue
+      }
+      if (newestDate == null || build.build_info.created_time > newestDate) {
+        newestDate = build.build_info.created_time
+        targetBuild = build
+      }
+    }
+
+    if (targetBuild == null) {
+      console.error('No queued build found despite there being a queried repo')
       return false
     }
 
-    // We then skip all older queued builds for this repo
-    // This results in fewer builds and therefore saves resources
-    console.log(repo._id)
-    await Repository.updateOne(
-      { _id: repo._id,
-        'builds.build_info.status': 'queued_lock' },
-      { $set: { 'builds.$[].build_info.status': 'skipped' } }).exec()
+    for (const build of repo.builds) {
+      if (build.build_info.status !== 'queued') {
+        continue
+      }
+      if (build !== targetBuild) {
+        console.log(`Skipping build: ${build}`)
+        const query = { 'builds._id': build._id }
+        const update = { $set: {
+          'builds.$.build_info.status': 'skipped'
+        } }
+        await Repository.findOneAndUpdate(query, update).exec()
+      }
+    }
   } catch (err) {
     // Seems like hell at this point? TODO: Handle exceptions better.
     console.error(err)
@@ -67,20 +74,33 @@ async function runQueries () {
     return false
   }
 
-  // There should be only one build returned
-  // assert(repo.builds.length == 1);
-  console.log(`One queued repo: ${repo.full_name}`)
-  const build = repo.builds[0]
-  console.log(build)
+  console.log(`One repository queued: ${repo.full_name}`)
+  console.log(targetBuild)
+  {
+    const query = { 'builds._id': targetBuild._id }
+    const update = { $set: {
+      'builds.$.build_info.status': 'started',
+      'builds.$.build_info.started_time': Date.now()
+    } }
+    await Repository.findOneAndUpdate(query, update).exec()
+  }
 
   try {
     const gitUrl = `https://github.com/${repo.full_name}.git`
     const packageInfo = processBuild(repo.full_name, gitUrl, 'repo', 'build')
-    updatePackageInfo(build, packageInfo)
+    updatePackageInfo(targetBuild, packageInfo)
+    {
+      const query = { 'builds._id': targetBuild._id }
+      const update = { $set: {
+        'builds.$.build_info.status': 'succeed',
+        'builds.$.build_info.ended_time': Date.now()
+      } }
+      await Repository.findOneAndUpdate(query, update).exec()
+    }
   } catch (err) {
     console.error(err)
     console.log(err)
-    reportBuildFailure(build, err.message)
+    reportBuildFailure(targetBuild, err.message)
   }
 
   return true
@@ -95,7 +115,7 @@ async function reportBuildFailure (build, errMsg) {
   const update = { $set: {
     'builds.$.build_info.status': 'failed',
     'builds.$.build_info.err_msg': errMsg,
-    'builds.$.build_info.end_time': Date.now()
+    'builds.$.build_info.ended_time': Date.now()
   } }
   return Repository.findOneAndUpdate(query, update).exec()
 }
