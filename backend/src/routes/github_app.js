@@ -123,7 +123,7 @@ module.exports = app => {
     const build = {
       commit: {
         message: head_commit.message,
-        hash: head_commit.tree_id,
+        hash: head_commit.id,
         url: head_commit.url,
         timestamp: head_commit.timestamp,
         committer: {
