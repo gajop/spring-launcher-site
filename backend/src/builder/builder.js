@@ -63,6 +63,7 @@ async function runQueries () {
   } catch (err) {
     // Seems like hell at this point? TODO: Handle exceptions better.
     console.error(err)
+    console.log(err)
     return false
   }
 
@@ -77,6 +78,8 @@ async function runQueries () {
     const packageInfo = processBuild(repo.full_name, gitUrl, 'repo', 'build')
     updatePackageInfo(build, packageInfo)
   } catch (err) {
+    console.error(err)
+    console.log(err)
     reportBuildFailure(build, err.message)
   }
 
