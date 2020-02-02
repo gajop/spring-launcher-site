@@ -42,7 +42,7 @@ export class UserFriendlyDatePipe implements PipeTransform {
     }
 
     const hoursAgo = Math.floor(minutesAgo / 60);
-    if (hoursAgo < 5) {
+    if (hoursAgo < 12) {
       let minutesStr = '';
       switch (minutesAgo % 60) {
         case 0:
@@ -60,11 +60,14 @@ export class UserFriendlyDatePipe implements PipeTransform {
       }
       return `${hoursAgo} hours ${minutesStr} ago`;
     }
+    if (hoursAgo < 24) {
+      return `${hoursAgo} hours ago`;
+    }
 
     const daysAgo = Math.floor(hoursAgo / 24);
     if (daysAgo < 5) {
       let hoursStr = '';
-      switch (hoursAgo % 60) {
+      switch (hoursAgo % 24) {
         case 0:
           hoursStr = '';
           break;
@@ -72,7 +75,7 @@ export class UserFriendlyDatePipe implements PipeTransform {
           hoursStr = '1 hour';
           break;
         default:
-          hoursStr = `${hoursAgo % 60} hours`;
+          hoursStr = `${hoursAgo % 24} hours`;
           break;
       }
       if (daysAgo === 1) {
