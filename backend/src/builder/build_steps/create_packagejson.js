@@ -28,8 +28,8 @@ function createPackagejson (launcherDir, repoDir, repoFullName, version) {
   packageTemplate.build.appId = `com.springrts.launcher.${repoDotName}`
   packageTemplate.build.publish.url = `https://spring-launcher.ams3.digitaloceanspaces.com/${repoFullName}`
   if (config.dependencies != null) {
-    for (const dependency in dependencies) {
-      packageTemplate.dependencies[dependency] = dependencies[dependency]
+    for (const dependency in config.dependencies) {
+      packageTemplate.dependencies[dependency] = config.dependencies[dependency]
     }
   }
 
