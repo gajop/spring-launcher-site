@@ -27,6 +27,11 @@ function createPackagejson (launcherDir, repoDir, repoFullName, version) {
   packageTemplate.version = version
   packageTemplate.build.appId = `com.springrts.launcher.${repoDotName}`
   packageTemplate.build.publish.url = `https://spring-launcher.ams3.digitaloceanspaces.com/${repoFullName}`
+  if (config.dependencies != null) {
+    for (const dependency in dependencies) {
+      packageTemplate.dependencies[dependency] = dependencies[dependency]
+    }
+  }
 
   fs.writeFileSync(`${repoDir}/package.json`, JSON.stringify(packageTemplate), 'utf8')
 }
