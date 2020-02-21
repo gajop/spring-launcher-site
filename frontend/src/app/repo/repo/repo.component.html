@@ -66,11 +66,8 @@
           <p class="alert-danger">{{ build.build_info.err_msg }}</p>
         </div>
       </div>
-      <div [ngSwitch]="build.build_info.status" class="col-md-1">
-        <div *ngSwitchCase="'skipped'">
-          <p class="skipped">skipped</p>
-        </div>
-        <div *ngSwitchDefault>{{ build.build_info.status }}</div>
+      <div class="status col-md-1">
+        <p [className]="build.build_info.status">{{ build.build_info.status }}</p>
       </div>
     </div>
   </div>

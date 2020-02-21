@@ -57,6 +57,22 @@
   border-left: 4px solid grey;
 }
 
+p.succeed {
+  color: lightgreen;
+}
+
+p.started {
+  color: yellow;
+}
+
+p.failed {
+  color: indianred;
+}
+
+p.skipped {
+  color: grey;
+}
+
 .user {
   color: lightgrey;
 }
@@ -67,8 +83,4 @@
 
 .download-link {
   padding-right: 10px;
-}
-
-p.skipped {
-  color: grey;
 }
