@@ -41,6 +41,22 @@
   padding: 10px;
 }
 
+.build.succeed {
+  border-left: 4px solid green;
+}
+
+.build.started {
+  border-left: 4px solid orange;
+}
+
+.build.failed {
+  border-left: 4px solid red;
+}
+
+.build.skipped {
+  border-left: 4px solid grey;
+}
+
 .user {
   color: lightgrey;
 }
