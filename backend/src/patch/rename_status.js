@@ -34,6 +34,9 @@ async function updateSucceed() {
 			for (const build of repo.builds) {
 				console.log(`Updating build: ${build.id} for repository: ${repo.full_name}`)
 				const query = { 'builds._id': build._id }
+				if (build.build_info.status !== 'succeed') {
+					continue;
+				}
 				const update = {
 					$set: {
 						'builds.$.build_info.status': 'success',
@@ -61,6 +64,9 @@ async function updateFailed() {
 			for (const build of repo.builds) {
 				console.log(`Updating build: ${build.id} for repository: ${repo.full_name}`)
 				const query = { 'builds._id': build._id }
+				if (build.build_info.status !== 'failed') {
+					continue;
+				}
 				const update = {
 					$set: {
 						'builds.$.build_info.status': 'failure',
