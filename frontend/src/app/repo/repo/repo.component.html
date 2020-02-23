@@ -38,7 +38,7 @@
     </div>
 
     <div [ngClass]="['row', 'build', build.build_info.status]" *ngFor="let build of buildsByNewest()">
-      <div class="col-md-4 game-title-block">
+      <div class="col-md-6 game-title-block">
         <div class="row">
           <p>{{ build.commit.message }}</p>
         </div>
@@ -48,26 +48,28 @@
             {{ build.commit.committer.username }}</a>
         </div>
       </div>
-      <div class="col-md-7">
-        <a href="https://github.com/{{ game.full_name }}/commit/{{
-            build.commit.hash
-          }}" target="_blank">{{ build.commit.hash }}</a>
+      <div class="col-md-4">
+        <div class="row">
+          <img class="commit-icon align-middle" [src]="'/assets/images/commit.png'" height="12">
+          <a href="https://github.com/{{ game.full_name }}/commit/{{
+              build.commit.hash
+            }}" target="_blank">{{ build.commit.hash | maxLength:10}}</a>
+        </div>
 
         <div class="row">
+          <fa-icon [icon]="faCalendarAlt" class="calendar-icon"></fa-icon>
           {{ build.build_info.created_time | userFriendlyDate }}
         </div>
-        <!-- <div class="row">
-          {{ build.build_info.started_time | date: "short" }}
+        <div class="row" *ngIf="build.build_info.started_time != null && build.build_info.ended_time != null">
+          <fa-icon [icon]="faHistory" class="time-icon"></fa-icon>
+          {{ build.build_info.started_time | userFriendlyTimespan : build.build_info.ended_time }}
         </div>
-        <div class="row">
-          {{ build.build_info.ended_time | date: "short" }}
-        </div> -->
         <div class="row">
           <p class="alert-danger">{{ build.build_info.err_msg }}</p>
         </div>
       </div>
-      <div class="status col-md-1">
-        <p [className]="build.build_info.status">{{ build.build_info.status }}</p>
+      <div class="status col-md-2">
+        <p [className]="build.build_info.status">{{ build.build_info.status | titlecase }}</p>
       </div>
     </div>
   </div>

@@ -9,7 +9,7 @@ export interface Game {
   game_title: string;
 }
 
-interface DownloadLink {
+export interface DownloadLink {
   platform: string;
   link: string;
 }
@@ -20,7 +20,7 @@ export interface Build {
   result_info: ResultInfo;
 }
 
-interface Commit {
+export interface Commit {
   message: string;
   hash: string;
   url: string;
@@ -28,13 +28,13 @@ interface Commit {
   committer: Committer;
 }
 
-interface Committer {
+export interface Committer {
   name: string;
   email: string;
   username: string;
 }
 
-interface BuildInfo {
+export interface BuildInfo {
   created_time: Date;
   started_time: Date;
   ended_time: Date;
@@ -42,7 +42,7 @@ interface BuildInfo {
   err_msg: string;
 }
 
-interface ResultInfo {
+export interface ResultInfo {
   dl_windows_url: string;
   dl_linux_url: string;
   dl_build_log_url: string;

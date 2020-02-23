@@ -5,7 +5,7 @@ const Repository = require('../models/repository')
 const { updatePackageInfo } = require('./build_steps/update_package_info')
 const { processBuild } = require('./process_build')
 
-async function runBuilder () {
+async function runBuilder() {
   try {
     await mongoose.connect('mongodb://localhost:27017/spring-launcher')
   } catch (err) {
@@ -25,7 +25,7 @@ async function runBuilder () {
   }
 }
 
-async function runQueries () {
+async function runQueries() {
   let targetBuild = null
   let repo = null
   try {
@@ -61,9 +61,11 @@ async function runQueries () {
       if (build !== targetBuild) {
         console.log(`Skipping build: ${build}`)
         const query = { 'builds._id': build._id }
-        const update = { $set: {
-          'builds.$.build_info.status': 'skipped'
-        } }
+        const update = {
+          $set: {
+            'builds.$.build_info.status': 'skipped'
+          }
+        }
         await Repository.findOneAndUpdate(query, update).exec()
       }
     }
@@ -78,10 +80,12 @@ async function runQueries () {
   console.log(targetBuild)
   {
     const query = { 'builds._id': targetBuild._id }
-    const update = { $set: {
-      'builds.$.build_info.status': 'started',
-      'builds.$.build_info.started_time': Date.now()
-    } }
+    const update = {
+      $set: {
+        'builds.$.build_info.status': 'started',
+        'builds.$.build_info.started_time': Date.now()
+      }
+    }
     await Repository.findOneAndUpdate(query, update).exec()
   }
 
@@ -91,10 +95,12 @@ async function runQueries () {
     updatePackageInfo(targetBuild, packageInfo)
     {
       const query = { 'builds._id': targetBuild._id }
-      const update = { $set: {
-        'builds.$.build_info.status': 'succeed',
-        'builds.$.build_info.ended_time': Date.now()
-      } }
+      const update = {
+        $set: {
+          'builds.$.build_info.status': 'success',
+          'builds.$.build_info.ended_time': Date.now()
+        }
+      }
       await Repository.findOneAndUpdate(query, update).exec()
     }
   } catch (err) {
@@ -106,17 +112,19 @@ async function runQueries () {
   return true
 }
 
-function wait (milleseconds) {
+function wait(milleseconds) {
   return new Promise(resolve => setTimeout(resolve, milleseconds))
 }
 
-async function reportBuildFailure (build, errMsg) {
+async function reportBuildFailure(build, errMsg) {
   const query = { 'builds._id': build._id }
-  const update = { $set: {
-    'builds.$.build_info.status': 'failed',
-    'builds.$.build_info.err_msg': errMsg,
-    'builds.$.build_info.ended_time': Date.now()
-  } }
+  const update = {
+    $set: {
+      'builds.$.build_info.status': 'failure',
+      'builds.$.build_info.err_msg': errMsg,
+      'builds.$.build_info.ended_time': Date.now()
+    }
+  }
   return Repository.findOneAndUpdate(query, update).exec()
 }
 

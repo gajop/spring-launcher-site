@@ -1,19 +1,18 @@
 import { DatePipe } from '@angular/common'
 import { Pipe, PipeTransform } from '@angular/core';
 
-
-@Pipe({ name: 'userFriendlyDate' })
-export class UserFriendlyDatePipe implements PipeTransform {
-  transform(date: Date): string {
-    const secondsAgo =
-      Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
-
-    if (secondsAgo < 10) {
-      return 'Just now';
+@Pipe({ name: 'userFriendlyTimespan' })
+export class UserFriendlyTimespanPipe implements PipeTransform {
+  transform(dateStart: Date, dateEnd: Date): string {
+    if (dateStart == null || dateEnd == null) {
+      return null;
     }
 
+    const secondsAgo =
+      Math.floor((new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / 1000);
+
     if (secondsAgo < 60) {
-      return `${secondsAgo} seconds ago`;
+      return `${secondsAgo} seconds`;
     }
 
     const minutesAgo = Math.floor(secondsAgo / 60);
@@ -31,12 +30,12 @@ export class UserFriendlyDatePipe implements PipeTransform {
           break;
       }
       if (minutesAgo === 1) {
-        return `${minutesAgo} minute ${secondsStr} ago`;
+        return `${minutesAgo} minute ${secondsStr}`;
       }
-      return `${minutesAgo} minutes ${secondsStr} ago`;
+      return `${minutesAgo} minutes ${secondsStr}`;
     }
     if (minutesAgo < 60) {
-      return `${minutesAgo} minutes ago`;
+      return `${minutesAgo} minutes`;
     }
 
     const hoursAgo = Math.floor(minutesAgo / 60);
@@ -54,12 +53,12 @@ export class UserFriendlyDatePipe implements PipeTransform {
           break;
       }
       if (hoursAgo === 1) {
-        return `${hoursAgo} hours ${minutesStr} ago`;
+        return `${hoursAgo} hours ${minutesStr}`;
       }
-      return `${hoursAgo} hours ${minutesStr} ago`;
+      return `${hoursAgo} hours ${minutesStr}`;
     }
     if (hoursAgo < 24) {
-      return `${hoursAgo} hours ago`;
+      return `${hoursAgo} hours`;
     }
 
     const daysAgo = Math.floor(hoursAgo / 24);
@@ -77,16 +76,12 @@ export class UserFriendlyDatePipe implements PipeTransform {
           break;
       }
       if (daysAgo === 1) {
-        return `${daysAgo} days ${hoursStr} ago`;
+        return `${daysAgo} days ${hoursStr}`;
       }
-      return `${daysAgo} days ${hoursStr} ago`;
+      return `${daysAgo} days ${hoursStr}`;
     }
 
-    if (daysAgo < 30) {
-      return `${daysAgo} days ago`;
-    }
-
-    return this.datepipe.transform(date);
+    return `${daysAgo} days`;
   }
 
   constructor(public datepipe: DatePipe) { }

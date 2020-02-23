@@ -1,8 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {faGithub, faLinux, faWindows} from '@fortawesome/free-brands-svg-icons';
-import {Build, Game} from 'src/app/game/game.model';
-import {GameService} from 'src/app/game/game.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { faGithub, faLinux, faWindows } from '@fortawesome/free-brands-svg-icons';
+import { faCalendarAlt } from '@fortawesome/free-regular-svg-icons';
+import { faHistory } from '@fortawesome/free-solid-svg-icons';
+
+import { Build, Game } from 'src/app/game/game.model';
+import { GameService } from 'src/app/game/game.service';
 
 @Component({
   selector: 'app-repo',
@@ -11,8 +14,8 @@ import {GameService} from 'src/app/game/game.service';
 })
 export class RepoComponent implements OnInit {
   constructor(
-      private activatedRoute: ActivatedRoute, private router: Router,
-      private gameService: GameService) {}
+    private activatedRoute: ActivatedRoute, private router: Router,
+    private gameService: GameService) { }
 
   game: Game = null;
   loaded = false;
@@ -20,6 +23,8 @@ export class RepoComponent implements OnInit {
   faGithub = faGithub;
   faLinux = faLinux;
   faWindows = faWindows;
+  faCalendarAlt = faCalendarAlt;
+  faHistory = faHistory;
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params: Params) => {
@@ -37,7 +42,7 @@ export class RepoComponent implements OnInit {
 
   getGameAvatarLink() {
     return `https://github.com/${
-        this.game.full_name.split('/')[0]}.png?size=200`;
+      this.game.full_name.split('/')[0]}.png?size=200`;
   }
 
   getUserAvatarLink(username: string) {
@@ -49,7 +54,7 @@ export class RepoComponent implements OnInit {
       return;
     }
     return this.game.builds[this.game.builds.length - 1]
-        .build_info.created_time;
+      .build_info.created_time;
   }
 
   getGameRepoNamePart(): string {

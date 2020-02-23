@@ -41,23 +41,27 @@
   padding: 10px;
 }
 
-.build.succeed {
-  border-left: 4px solid green;
+.build.success {
+  border-left: 4px solid lightgreen;
 }
 
 .build.started {
   border-left: 4px solid orange;
 }
 
-.build.failed {
-  border-left: 4px solid red;
+.build.failure {
+  border-left: 4px solid indianred;
 }
 
 .build.skipped {
   border-left: 4px solid grey;
 }
 
-p.succeed {
+.status {
+  text-align: right;
+}
+
+p.success {
   color: lightgreen;
 }
 
@@ -65,7 +69,7 @@ p.started {
   color: yellow;
 }
 
-p.failed {
+p.failure {
   color: indianred;
 }
 
@@ -79,8 +83,25 @@ p.skipped {
 
 .game-title-block {
   padding-top: 0px;
+  padding-right: 50px;
 }
 
 .download-link {
   padding-right: 10px;
+}
+
+.calendar-icon {
+  margin-right: 8px;
+  margin-left: 2px;
+}
+
+.time-icon {
+  margin-left: 1px;
+  margin-right: 7px;
+}
+
+.commit-icon {
+  margin-right: 5px;
+  margin-top: 4px;
+  filter: brightness(0) invert(1);
 }

@@ -5,47 +5,31 @@
   <div class="repo-block" *ngIf="loaded">
     <p>Repositories</p>
     <div class="row game" *ngFor="let game of games">
-      <div class="col-md-4 game-title-block" [routerLink]="[game.full_name]">
+      <div class="col-md-5 game-title-block" [routerLink]="[game.full_name]">
         <div class="row">
-          <img
-            class="avatar"
-            src="{{ getGameAvatarLink(game) }}"
-            width="32"
-            height="32"
-          />
+          <img class="avatar" src="{{ getGameAvatarLink(game) }}" width="32" height="32" />
           <p>{{ game.full_name }}</p>
         </div>
       </div>
-      <div class="col-md-4 downloads">
-        <a
-          class="download-link"
-          href="{{ download_link.link }}"
-          [ngSwitch]="download_link.platform"
-          *ngFor="let download_link of game.download_links"
-        >
+      <div class="col-md-3 downloads">
+        <a class="download-link" href="{{ download_link.link }}" [ngSwitch]="download_link.platform"
+          *ngFor="let download_link of game.download_links">
           <fa-icon [icon]="faLinux" *ngSwitchCase="'linux'">Linux</fa-icon>
-          <fa-icon *ngSwitchCase="'windows'" [icon]="faWindows"
-            >Windows</fa-icon
-          >
-          <span *ngSwitchCase="'windows-portable'"
-            ><fa-icon [icon]="faWindows">Windows-Portable</fa-icon
-            ><sub>P</sub></span
-          >
+          <fa-icon *ngSwitchCase="'windows'" [icon]="faWindows">Windows</fa-icon>
+          <span *ngSwitchCase="'windows-portable'">
+            <fa-icon [icon]="faWindows">Windows-Portable</fa-icon><sub>P</sub>
+          </span>
         </a>
-        <a class="link" href="https://github.com/{{ game.full_name }}"
-          ><fa-icon [icon]="faGithub">Github</fa-icon></a
-        >
+        <a class="link" href="https://github.com/{{ game.full_name }}">
+          <fa-icon [icon]="faGithub">Github</fa-icon>
+        </a>
       </div>
       <div class="col-md-2">
-        <a
-          class="link"
-          href="http://logs.springrts.com/tags/{{ game.title }}/"
-          *ngIf="game.title"
-          >User logs</a
-        >
+        <a class="link" href="http://logs.springrts.com/tags/{{ game.title }}/" *ngIf="game.title">User logs</a>
       </div>
       <div class="col-md-2" *ngIf="game.builds.length > 0">
-        <span>Updated: {{ getGameBuildTime(game) | userFriendlyDate }}</span>
+        <fa-icon [icon]="faCalendarAlt"></fa-icon>
+        <span class="calendar-text">{{ getGameBuildTime(game) | userFriendlyDate }}</span>
       </div>
     </div>
   </div>

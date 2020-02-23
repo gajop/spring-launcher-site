@@ -26,3 +26,8 @@
 .avatar {
   margin-right: 5px;
 }
+
+.calendar-text {
+  margin-left: 5px;
+  font-size: small;
+}

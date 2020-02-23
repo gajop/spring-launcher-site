@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {faGithub, faLinux, faWindows} from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faLinux, faWindows } from '@fortawesome/free-brands-svg-icons';
+import { faCalendarAlt } from '@fortawesome/free-regular-svg-icons';
 
-import {Game} from 'src/app/game/game.model';
-import {GameService} from 'src/app/game/game.service';
+import { Game } from 'src/app/game/game.model';
+import { GameService } from 'src/app/game/game.service';
 
 @Component({
   selector: 'app-repo-list',
@@ -17,8 +18,9 @@ export class RepoListComponent implements OnInit {
   faGithub = faGithub;
   faLinux = faLinux;
   faWindows = faWindows;
+  faCalendarAlt = faCalendarAlt;
 
-  constructor(public gameService: GameService) {}
+  constructor(public gameService: GameService) { }
 
   ngOnInit() {
     this.gameService.getAllRepos().subscribe(games => {
