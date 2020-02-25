@@ -41,12 +41,16 @@
   padding: 10px;
 }
 
-.build.success {
-  border-left: 4px solid lightgreen;
+.build.queued {
+  border-left: 4px solid orange;
 }
 
 .build.started {
-  border-left: 4px solid orange;
+  border-left: 4px solid lightskyblue;
+}
+
+.build.success {
+  border-left: 4px solid lightgreen;
 }
 
 .build.failure {
@@ -61,12 +65,16 @@
   text-align: right;
 }
 
-p.success {
-  color: lightgreen;
+p.queued {
+  color: orange;
 }
 
 p.started {
-  color: yellow;
+  color: lightskyblue;
+}
+
+p.success {
+  color: lightgreen;
 }
 
 p.failure {
