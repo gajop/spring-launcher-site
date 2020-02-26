@@ -56,13 +56,13 @@
             }}" target="_blank">{{ build.commit.hash | maxLength:10}}</a>
         </div>
 
-        <div class="row">
-          <fa-icon [icon]="faCalendarAlt" class="calendar-icon"></fa-icon>
-          {{ build.build_info.created_time | userFriendlyDate }}
-        </div>
         <div class="row" *ngIf="build.build_info.started_time != null && build.build_info.ended_time != null">
           <fa-icon [icon]="faHistory" class="time-icon"></fa-icon>
           {{ build.build_info.started_time | userFriendlyTimespan : build.build_info.ended_time }}
+        </div>
+        <div class="row" data-toggle="tooltip" title="{{build.build_info.created_time | date:'medium' }}">
+          <fa-icon [icon]="faCalendarAlt" class="calendar-icon"></fa-icon>
+          {{ build.build_info.created_time | userFriendlyDate }}
         </div>
         <div class="row">
           <p class="alert-danger">{{ build.build_info.err_msg }}</p>
