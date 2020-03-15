@@ -16,7 +16,7 @@ function createPackagejson (launcherDir, repoDir, repoFullName, version) {
   const configStr = fs.readFileSync(`${repoDir}/dist_cfg/config.json`)
   const config = JSON.parse(configStr)
 
-  assert(config.title != null)
+  assert(config.title != null, 'Missing config title')
 
   const repoDotName = repoFullName.replace(/\//g, '.')
 

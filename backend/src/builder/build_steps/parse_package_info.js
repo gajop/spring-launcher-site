@@ -6,7 +6,7 @@ const { readFileSync } = require('fs')
 function parsePackageInfo (repoDir) {
   const configStr = readFileSync(`${repoDir}/dist_cfg/config.json`)
   const config = JSON.parse(configStr)
-  assert(config.title != null)
+  assert(config.title != null, 'Missing config title')
 
   var hasPortable = false
   for (const setup of config.setups) {
